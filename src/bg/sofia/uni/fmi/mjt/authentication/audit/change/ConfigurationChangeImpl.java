@@ -6,11 +6,11 @@ import bg.sofia.uni.fmi.mjt.authentication.audit.Issuer;
 
 import java.util.UUID;
 
-public class BasicConfigurationChange  extends BasicEntry implements ConfigurationChange{
+public class ConfigurationChangeImpl extends BasicEntry implements ConfigurationChange{
 
     private UUID operationId;
 
-    protected BasicConfigurationChange(UUID operationId, Issuer issuer) {
+    protected ConfigurationChangeImpl(UUID operationId, Issuer issuer) {
         super(EntryType.CONFIGURATION_CHANGE, issuer);
         setOperationId(operationId);
     }

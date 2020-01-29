@@ -4,7 +4,7 @@ import bg.sofia.uni.fmi.mjt.authentication.audit.Issuer;
 
 import java.util.UUID;
 
-public class FinishedConfigurationChangeImpl extends BasicConfigurationChange implements FinishedConfigurationChange {
+public class FinishedConfigurationChangeImpl extends ConfigurationChangeImpl implements FinishedConfigurationChange {
 
     private ChangeResult changeResult;
 
