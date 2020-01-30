@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Audit {
+public class AuditLogImpl implements AuditLog{
 
     public static final String PATH_NULL_EXCEPTION_MESSAGE = "AuditDirectory is null";
     public static final String INVALID_PATH_EXCEPTION_MESSAGE = "Invalid path - should be a directory";
@@ -17,7 +17,7 @@ public class Audit {
 
     private Path auditDirectory;
     
-    public Audit(Path auditDirectory){
+    public AuditLogImpl(Path auditDirectory){
         if(auditDirectory == null){
             throw new IllegalArgumentException(PATH_NULL_EXCEPTION_MESSAGE);
         }
@@ -27,7 +27,7 @@ public class Audit {
         this.auditDirectory = auditDirectory;
     }
 
-
+    @Override
     public void log(Entry entry) throws IOException {
         if(entry == null){
             throw new IllegalArgumentException(ENTRY_NULL_EXCEPTION_MESSAGE);
