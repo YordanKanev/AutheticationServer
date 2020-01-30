@@ -1,7 +1,5 @@
 package bg.sofia.uni.fmi.mjt.authentication.model;
 
-import bg.sofia.uni.fmi.mjt.authentication.model.user.SessionFactory;
-
 import java.util.UUID;
 import java.util.concurrent.*;
 

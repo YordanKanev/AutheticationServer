@@ -1,6 +1,4 @@
-package bg.sofia.uni.fmi.mjt.authentication.model.user;
-
-import bg.sofia.uni.fmi.mjt.authentication.model.Session;
+package bg.sofia.uni.fmi.mjt.authentication.model;
 
 public interface SessionFactory {
 
