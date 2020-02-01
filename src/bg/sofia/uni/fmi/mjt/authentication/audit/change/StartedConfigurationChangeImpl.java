@@ -10,6 +10,7 @@ public class StartedConfigurationChangeImpl extends ConfigurationChangeImpl impl
 
     public StartedConfigurationChangeImpl(Change change, UUID operationId, Issuer issuer) {
         super(operationId, issuer);
+        setChange(change);
     }
 
     @Override
