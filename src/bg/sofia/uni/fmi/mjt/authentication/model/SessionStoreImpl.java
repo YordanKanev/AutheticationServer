@@ -81,6 +81,6 @@ public class SessionStoreImpl implements SessionStore {
         if(session == null) {
             return;
         }
-
+        usernameToSession.remove(session.getUsername());
     }
 }

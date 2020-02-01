@@ -26,7 +26,7 @@ public class SessionImpl implements Session {
     }
 
     @Override
-    public String getUser() {
+    public String getUsername() {
         return username;
     }
 
