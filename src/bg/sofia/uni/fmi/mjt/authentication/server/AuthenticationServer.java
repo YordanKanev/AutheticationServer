@@ -33,7 +33,7 @@ public class AuthenticationServer implements AuthenticationController {
 		WebServer webServer = WebServerBuilder.defaultWebServerBuilder().build(this);
 	}
 	
-	public AuthenticationServer defaultAuthenticationServer() throws IOException {
+	public static AuthenticationServer defaultAuthenticationServer() throws IOException {
 		return new AuthenticationServer(new AuthenticationServerConfiguration() {
 			
 			@Override
