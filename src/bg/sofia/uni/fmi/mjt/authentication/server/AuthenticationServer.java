@@ -1,12 +1,14 @@
 package bg.sofia.uni.fmi.mjt.authentication.server;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import bg.sofia.uni.fmi.mjt.authentication.audit.AuditLog;
-import bg.sofia.uni.fmi.mjt.authentication.model.SessionStore;
+import bg.sofia.uni.fmi.mjt.authentication.commands.Command;
+import bg.sofia.uni.fmi.mjt.authentication.commands.CommandFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Registrator;
+import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
 import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
 
 public class AuthenticationServer implements AuthenticationController {
@@ -20,6 +22,7 @@ public class AuthenticationServer implements AuthenticationController {
 	private WebServer webServer;
 	private UserRepository userRepository;
 	private AuthenticationServerConfiguration configuration;
+	private Registrator registrator;
 	
 	public AuthenticationServer(AuthenticationServerConfiguration configuration) throws IOException {
 		if(configuration == null) {
@@ -67,6 +70,7 @@ public class AuthenticationServer implements AuthenticationController {
 		if(request == null) {
 			return;
 		}
-		
+		Command command = CommandFactory.getInstance(request);
+		command.execute();
 	}
 }

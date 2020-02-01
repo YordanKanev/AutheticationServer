@@ -1,4 +1,4 @@
-package bg.sofia.uni.fmi.mjt.authentication.model;
+package bg.sofia.uni.fmi.mjt.authentication.commands;
 
 import java.util.UUID;
 

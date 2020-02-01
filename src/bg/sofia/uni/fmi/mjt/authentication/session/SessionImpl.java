@@ -1,8 +1,5 @@
-package bg.sofia.uni.fmi.mjt.authentication.model;
+package bg.sofia.uni.fmi.mjt.authentication.session;
 
-import bg.sofia.uni.fmi.mjt.authentication.model.user.User;
-
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
