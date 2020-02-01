@@ -1,14 +1,12 @@
 package bg.sofia.uni.fmi.mjt.authentication.model;
 
-import bg.sofia.uni.fmi.mjt.authentication.model.user.SessionFactory;
-
 import java.util.UUID;
 import java.util.concurrent.*;
 
 public class SessionStore {
 
-    private ConcurrentHashMap<String, Session> usernameToSession = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<UUID, Session> sessionIdToSession = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, SessionImpl> usernameToSession = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<UUID, SessionImpl> sessionIdToSession = new ConcurrentHashMap<>();
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     private long ttl;
 
@@ -29,7 +27,7 @@ public class SessionStore {
             //TODO: set message
             throw new IllegalArgumentException();
         }
-        Session session = SessionFactory.getInstance(ttl);
+        SessionImpl session = SessionFactory.getInstance(username);
         usernameToSession.put(username,session);
         sessionIdToSession.put(session.getSessionId(),session);
         executorService.schedule(new Runnable() {
@@ -55,5 +53,29 @@ public class SessionStore {
             throw new IllegalArgumentException();
         }
         return sessionIdToSession.contains(sessionId);
+    }
+
+    public void deleteSession(String username){
+        if(username == null) {
+            //TODO: set message
+            throw  new IllegalArgumentException();
+        }
+        SessionImpl session = usernameToSession.remove(username);
+        if(session == null){
+            return;
+        }
+        sessionIdToSession.remove(session.getSessionId());
+    }
+
+    public void deleteSession(UUID sessionId) {
+        if(sessionId == null) {
+            //TODO: set message
+            throw new IllegalArgumentException();
+        }
+        SessionImpl session = sessionIdToSession.remove(sessionId);
+        if(session == null) {
+            return;
+        }
+
     }
 }
