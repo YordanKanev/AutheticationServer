@@ -34,8 +34,6 @@ class LoginImpl implements Login {
             throw new IllegalArgumentException();
         }
 
-        sessionStore.refreshSession(username);
-
         if(userRepository.exists(username)){
             User user = userRepository.findOne(username);
             if(user == null){
