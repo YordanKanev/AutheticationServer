@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
+
 public interface CommandFactory {
     //Commands
     String REGISTER = "register";
@@ -18,10 +20,11 @@ public interface CommandFactory {
         String FIRST_NAME = "first-name";
         String LAST_NAME = "last-name";
         String EMAIL = "email";
+        String SESSION_ID = "session-id";
     }
 
-    static Command getInstance(String request) {
-        if (request == null) {
+    static Command getInstance(String request, CommandExecutor commandExecutor) {
+        if (request == null || commandExecutor == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
@@ -31,25 +34,31 @@ public interface CommandFactory {
             //TODO: throw exception
         }
 
-        switch (words[0]) {
-            case REGISTER:
-                break;
-            case LOGIN:
-                break;
-            case UPDATE_USER:
-                break;
-            case RESET_PASSWORD:
-                break;
-            case LOGOUT:
-                break;
-            case ADD_ADMIN_USER:
-                break;
-            case REMOVED_ADMIN_USER:
-                break;
-            case DELETE_USER:
-                break;
-            default: //TODO: throw exception; remove break;
-                break;
+        try {
+            switch (words[0]) {
+                case REGISTER:
+                    result = new RegisterCommand(request, commandExecutor, commandExecutor);
+                    break;
+                case LOGIN:
+                    result = new LoginCommand(request, commandExecutor);
+                    break;
+                case UPDATE_USER:
+                    break;
+                case RESET_PASSWORD:
+                    break;
+                case LOGOUT:
+                    break;
+                case ADD_ADMIN_USER:
+                    break;
+                case REMOVED_ADMIN_USER:
+                    break;
+                case DELETE_USER:
+                    break;
+                default: //TODO: throw exception; remove break;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }

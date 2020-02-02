@@ -14,26 +14,14 @@ import org.apache.commons.cli.*;
 
 public class RegisterCommand implements Command {
 
-    private static final Option optionUsername = Option.builder()
-            .longOpt(CommandFactory.CommandParameters.USERNAME)
-            .required()
-            .build();
-    private static final Option optionPassword = Option.builder()
-            .longOpt(CommandFactory.CommandParameters.PASSWORD)
-            .required()
-            .build();
-    private static final Option optionFirstName = Option.builder()
-            .longOpt(CommandFactory.CommandParameters.FIRST_NAME)
-            .required()
-            .build();
-    private static final Option optionLastName = Option.builder()
-            .longOpt(CommandFactory.CommandParameters.LAST_NAME)
-            .required()
-            .build();
-    private static final Option optionEmail = Option.builder()
-            .longOpt(CommandFactory.CommandParameters.EMAIL)
-            .required()
-            .build();
+    public static final String NOT_REGISTERED_MESSAGE = "Registration failed.";
+    public static final String NOT_LOGGED_IN_MESSAGE = "Login failed.";
+
+    private static final Option optionUsername = CommandOptions.requiredOptionUsername;
+    private static final Option optionPassword = CommandOptions.requiredOptionPassword;
+    private static final Option optionFirstName = CommandOptions.requiredOptionFirstName;
+    private static final Option optionLastName = CommandOptions.requiredOptionLastName;
+    private static final Option optionEmail = CommandOptions.requiredOptionEmail;
     private static final Options options = new Options().addOption(optionUsername)
             .addOption(optionPassword)
             .addOption(optionFirstName)
@@ -73,7 +61,7 @@ public class RegisterCommand implements Command {
     @Override
     public Response execute() {
         try{
-            registrator.register(new UserRegistration() {
+            User user = registrator.register(new UserRegistration() {
                 @Override
                 public String getUsername() {
                     return username;
@@ -99,7 +87,13 @@ public class RegisterCommand implements Command {
                     return email;
                 }
             });
+            if(user == null) {
+                ResponseFactory.error(NOT_REGISTERED_MESSAGE);
+            }
             UUID sessionId = login.login(username,password);
+            if(sessionId == null){
+                return ResponseFactory.error(NOT_LOGGED_IN_MESSAGE);
+            }
             return ResponseFactory.success(sessionId.toString());
         }catch (Exception e){
             return ResponseFactory.error(e.getMessage());

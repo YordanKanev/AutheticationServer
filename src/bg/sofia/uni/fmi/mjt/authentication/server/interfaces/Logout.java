@@ -1,7 +1,9 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.interfaces;
 
+import bg.sofia.uni.fmi.mjt.authentication.session.Session;
+
 import java.util.UUID;
 
 public interface Logout {
-    void logout(UUID sessionId);
+    Session logout(UUID sessionId);
 }

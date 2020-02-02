@@ -7,5 +7,6 @@ public interface CommandExecutor extends Registrator,
         UserUpdater,
         AdminCreator,
         AdminRemover,
-        UserDeleter {
+        UserDeleter,
+        IssuerProvider {
 }
