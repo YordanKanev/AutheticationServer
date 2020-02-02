@@ -5,7 +5,9 @@ import java.util.UUID;
 public interface SessionStore {
 	boolean hasActiveSession(String username);
 	boolean hasActiveSession(UUID sessionId);
-	void createSession(String username);
-	void deleteSession(String username);
-	void deleteSession(UUID sessionId);
+	UUID createSession(String username);
+	UUID refreshSession(String username);
+	UUID refreshSession(UUID sessionId);
+	Session deleteSession(String username);
+	Session deleteSession(UUID sessionId);
 }

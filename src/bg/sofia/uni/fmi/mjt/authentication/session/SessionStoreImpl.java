@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.session;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -9,40 +11,82 @@ public class SessionStoreImpl implements SessionStore {
     private ConcurrentHashMap<UUID, Session> sessionIdToSession = new ConcurrentHashMap<>();
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     private long ttl;
+    private Map<UUID, ScheduledFuture> expirations = new ConcurrentHashMap<>();
 
     /**
-     *
      * @param ttl - Time in milliseconds to keep session active
      */
-    public SessionStoreImpl(long ttl){
+    public SessionStoreImpl(long ttl) {
         this.ttl = ttl;
     }
 
     @Override
-    public void createSession(String username){
-        if(username == null){
+    public UUID createSession(String username) {
+        if (username == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
-        if(hasActiveSession(username)){
+        if (hasActiveSession(username)) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
         Session session = SessionFactory.getInstance(username);
-        usernameToSession.put(username,session);
-        sessionIdToSession.put(session.getSessionId(),session);
-        executorService.schedule(new Runnable() {
+        usernameToSession.put(username, session);
+        sessionIdToSession.put(session.getSessionId(), session);
+        setExpiration(session);
+        return session.getSessionId();
+    }
+
+    private void setExpiration(Session session) {
+        ScheduledFuture scheduledFuture = executorService.schedule(new Runnable() {
             @Override
             public void run() {
-                usernameToSession.remove(username);
+                usernameToSession.remove(session.getUsername());
                 sessionIdToSession.remove(session.getSessionId());
             }
-        },ttl, TimeUnit.MILLISECONDS);
+        }, ttl, TimeUnit.MILLISECONDS);
+        expirations.put(session.getSessionId(), scheduledFuture);
+    }
+
+    private UUID refreshSession(Session session) {
+        if (session == null) {
+            return null;
+        }
+        ScheduledFuture scheduledFuture = expirations.remove(session.getSessionId());
+        if (scheduledFuture == null) {
+            return null;
+        }
+        boolean canceled = scheduledFuture.cancel(false);
+        if (!canceled) {
+            return null;
+        }
+        setExpiration(session);
+        return session.getSessionId();
     }
 
     @Override
-    public boolean hasActiveSession(String username){
-        if(username == null){
+    public UUID refreshSession(String username) {
+        if (username == null) {
+            //TODO: set message
+            throw new IllegalArgumentException();
+        }
+        Session session = usernameToSession.get(username);
+        return refreshSession(session);
+    }
+
+    @Override
+    public UUID refreshSession(UUID sessionId) {
+        if (sessionId == null) {
+            //TODO: set message
+            throw new IllegalArgumentException();
+        }
+        Session session = sessionIdToSession.get(sessionId);
+        return refreshSession(session);
+    }
+
+    @Override
+    public boolean hasActiveSession(String username) {
+        if (username == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
@@ -50,8 +94,8 @@ public class SessionStoreImpl implements SessionStore {
     }
 
     @Override
-    public boolean hasActiveSession(UUID sessionId){
-        if(sessionId == null){
+    public boolean hasActiveSession(UUID sessionId) {
+        if (sessionId == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
@@ -59,28 +103,28 @@ public class SessionStoreImpl implements SessionStore {
     }
 
     @Override
-    public void deleteSession(String username){
-        if(username == null) {
+    public Session deleteSession(String username) {
+        if (username == null) {
             //TODO: set message
-            throw  new IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         Session session = usernameToSession.remove(username);
-        if(session == null){
-            return;
+        if (session == null) {
+            return null;
         }
-        sessionIdToSession.remove(session.getSessionId());
+        return sessionIdToSession.remove(session.getSessionId());
     }
 
     @Override
-    public void deleteSession(UUID sessionId) {
-        if(sessionId == null) {
+    public Session deleteSession(UUID sessionId) {
+        if (sessionId == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
         Session session = sessionIdToSession.remove(sessionId);
-        if(session == null) {
-            return;
+        if (session == null) {
+            return null;
         }
-        usernameToSession.remove(session.getUsername());
+        return usernameToSession.remove(session.getUsername());
     }
 }
