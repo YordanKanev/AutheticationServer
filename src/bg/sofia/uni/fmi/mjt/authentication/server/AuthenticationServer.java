@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 import bg.sofia.uni.fmi.mjt.authentication.audit.AuditLog;
 import bg.sofia.uni.fmi.mjt.authentication.commands.Command;
 import bg.sofia.uni.fmi.mjt.authentication.commands.CommandFactory;
+import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
+import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Registrator;
 import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
 import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
@@ -66,11 +68,12 @@ public class AuthenticationServer implements AuthenticationController {
 	}
 
 	@Override
-	public void onRequest(String request, Consumer<String> consumer) {
+	public void onRequest(Request request, Consumer<String> consumer) {
 		if(request == null) {
 			return;
 		}
-		Command command = CommandFactory.getInstance(request);
+		Command command = CommandFactory.getInstance(request,
+				CommandExecutor.defaultExecutor(userRepository,sessionStore,auditLog));
 		command.execute();
 	}
 }

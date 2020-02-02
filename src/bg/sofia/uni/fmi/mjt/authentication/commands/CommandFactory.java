@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
+import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AuthenticationEngine;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
 
 public interface CommandFactory {
@@ -23,13 +25,13 @@ public interface CommandFactory {
         String SESSION_ID = "session-id";
     }
 
-    static Command getInstance(String request, CommandExecutor commandExecutor) {
-        if (request == null || commandExecutor == null) {
+    static Command getInstance(Request request, CommandExecutor commandExecutor, AuthenticationEngine authenticationEngine) {
+        if (request == null || commandExecutor == null || authenticationEngine == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
         Command result = null;
-        String[] words = request.split("\\s+");
+        String[] words = request.getRequestBody().split("\\s+");
         if (words.length < 2) {
             //TODO: throw exception
         }
@@ -40,7 +42,7 @@ public interface CommandFactory {
                     result = new RegisterCommand(request, commandExecutor, commandExecutor);
                     break;
                 case LOGIN:
-                    result = new LoginCommand(request, commandExecutor);
+                    result = new LoginCommand(request, commandExecutor, authenticationEngine.getAuditLog());
                     break;
                 case UPDATE_USER:
                     break;

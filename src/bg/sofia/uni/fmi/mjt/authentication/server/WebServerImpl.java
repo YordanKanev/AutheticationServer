@@ -66,7 +66,8 @@ public class WebServerImpl implements WebServer {
 	                            sc.close();
 	                        } else {
 	                        	String request = new String(requestByteBuffer.array(), 0, requestByteBuffer.limit());
-	                        	authenticationController.onRequest(request, (response) -> {
+	                        	String ipAddress = sc.getRemoteAddress().toString();
+	                        	authenticationController.onRequest(request, ipAddress, (response) -> {
 	                        		responseByteBuffer.clear();
 	                        		responseByteBuffer.put(response.getBytes());
 	                        		responseByteBuffer.flip();

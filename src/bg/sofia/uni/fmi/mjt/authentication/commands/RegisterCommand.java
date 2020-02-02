@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import bg.sofia.uni.fmi.mjt.authentication.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.model.user.UserFactory;
+import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserRegistration;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.ResponseFactory;
@@ -12,7 +13,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Login;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Registrator;
 import org.apache.commons.cli.*;
 
-public class RegisterCommand implements Command {
+public class RegisterCommand extends BasicCommand {
 
     public static final String NOT_REGISTERED_MESSAGE = "Registration failed.";
     public static final String NOT_LOGGED_IN_MESSAGE = "Login failed.";
@@ -27,7 +28,6 @@ public class RegisterCommand implements Command {
             .addOption(optionFirstName)
             .addOption(optionLastName)
             .addOption(optionEmail);
-    private static final CommandLineParser parser = new DefaultParser();
 
     private String username;
     private String password;
@@ -38,12 +38,13 @@ public class RegisterCommand implements Command {
     private Registrator registrator;
     private Login login;
 
-    public RegisterCommand(String request, Registrator registrator, Login login) throws ParseException {
+    public RegisterCommand(Request request, Registrator registrator, Login login) throws ParseException {
+        super(request);
         if (request == null || registrator == null || login == null) {
             //TODO: set message
             throw new IllegalArgumentException();
         }
-        String[] words = request.split("\\s+");
+        String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(CommandFactory.REGISTER)) {
             //TODO: set message
             throw new IllegalArgumentException();

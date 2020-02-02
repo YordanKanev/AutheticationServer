@@ -3,6 +3,7 @@ package bg.sofia.uni.fmi.mjt.authentication.commands;
 import bg.sofia.uni.fmi.mjt.authentication.audit.AuditLog;
 import bg.sofia.uni.fmi.mjt.authentication.audit.EntryFactory;
 import bg.sofia.uni.fmi.mjt.authentication.audit.Issuer;
+import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.ResponseFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.IssuerProvider;
@@ -11,7 +12,7 @@ import org.apache.commons.cli.*;
 
 import java.util.UUID;
 
-public class LoginCommand implements Command {
+public class LoginCommand extends BasicCommand {
 
     private static final String LOGIN_FAILED_MESSAGE = "Login failed.";
 
@@ -21,8 +22,6 @@ public class LoginCommand implements Command {
     private static final Options options = new Options().addOption(optionUsername)
             .addOption(optionPassword)
             .addOption(optionSessionId);
-    private static final CommandLineParser parser = new DefaultParser();
-
     private String username;
     private String password;
     private String sessionId;
@@ -31,12 +30,13 @@ public class LoginCommand implements Command {
     private AuditLog auditLog;
     private Issuer issuer;
 
-    public LoginCommand(String request, Login login, AuditLog auditLog, Issuer issuer) throws ParseException {
-        if(request == null || login == null || auditLog == null || issuer == null){
+    public LoginCommand(Request request, Login login, AuditLog auditLog) throws ParseException {
+        super(request);
+        if(request == null || login == null || auditLog == null){
             //TODO: set message
             throw new IllegalArgumentException();
         }
-        String[] words = request.split("\\s+");
+        String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(CommandFactory.LOGIN)) {
             //TODO: set message
             throw new IllegalArgumentException();
