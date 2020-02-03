@@ -15,12 +15,14 @@ public class AuditLogImpl implements AuditLog{
     private static final String FILE_NAME = "log_";
     private static final Gson GSON = new Gson();
 
+
     private Path auditDirectory;
     
-    public AuditLogImpl(Path auditDirectory){
-        if(auditDirectory == null){
+    public AuditLogImpl(AuditConfiguration auditConfiguration){
+        if(auditConfiguration == null){
             throw new IllegalArgumentException(PATH_NULL_EXCEPTION_MESSAGE);
         }
+        Path auditDirectory = auditConfiguration.getAuditDirectoryPath();
         if(!Files.isDirectory(auditDirectory)){
             throw new IllegalArgumentException(INVALID_PATH_EXCEPTION_MESSAGE);
         }

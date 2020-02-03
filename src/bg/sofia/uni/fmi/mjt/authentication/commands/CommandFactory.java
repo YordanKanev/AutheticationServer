@@ -19,6 +19,8 @@ public interface CommandFactory {
     interface CommandParameters {
         String USERNAME = "username";
         String PASSWORD = "password";
+        String OLD_PASSWORD = "old-password";
+        String NEW_PASSWORD = "new-password";
         String FIRST_NAME = "first-name";
         String LAST_NAME = "last-name";
         String EMAIL = "email";

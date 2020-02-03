@@ -10,6 +10,7 @@ public interface User extends Serializable {
     String EMAIL_NULL_EXCEPTION_MESSAGE = "Email is null.";
     String PASSWORD_NULL_EXCEPTION_MESSAGE = "Password is null.";
     String PASSWORDENCRYPTOR_NULL_EXCEPTION_MESSAGE = "PasswordEncryptor is null.";
+    String PASSWORD_MISMATCH_MESSAGE = "Wrong password.";
 
     String getUsername();
     String getFirstName();

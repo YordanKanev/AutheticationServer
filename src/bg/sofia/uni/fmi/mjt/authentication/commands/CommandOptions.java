@@ -8,6 +8,10 @@ public interface CommandOptions {
             .longOpt(CommandFactory.CommandParameters.USERNAME);
     Option.Builder passwordBuilder = Option.builder()
             .longOpt(CommandFactory.CommandParameters.PASSWORD);
+    Option.Builder oldPasswordBuilder = Option.builder()
+            .longOpt(CommandFactory.CommandParameters.OLD_PASSWORD);
+    Option.Builder newPasswordBuilder = Option.builder()
+            .longOpt(CommandFactory.CommandParameters.NEW_PASSWORD);
     Option.Builder firstNameBuilder = Option.builder()
             .longOpt(CommandFactory.CommandParameters.FIRST_NAME);
     Option.Builder lastNameBuilder = Option.builder()
@@ -34,6 +38,12 @@ public interface CommandOptions {
             .required()
             .build();
     Option requiredOptionPassword = passwordBuilder
+            .required()
+            .build();
+    Option requiredOptionOldPassword = oldPasswordBuilder
+            .required()
+            .build();
+    Option requiredOptionNewPassword = newPasswordBuilder
             .required()
             .build();
     Option requiredOptionFirstName = firstNameBuilder
