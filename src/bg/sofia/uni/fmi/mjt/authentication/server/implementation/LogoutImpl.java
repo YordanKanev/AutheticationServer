@@ -1,8 +1,8 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.implementation;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Logout;
-import bg.sofia.uni.fmi.mjt.authentication.session.Session;
-import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.Session;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
 
 import java.util.UUID;
 

@@ -1,13 +1,13 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.implementation;
 
-import bg.sofia.uni.fmi.mjt.authentication.model.user.User;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.request.AdminOperation;
-import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.AdminOperation;
+import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepository;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AdminCreator;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AdminRemover;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.UserDeleter;
-import bg.sofia.uni.fmi.mjt.authentication.session.Session;
-import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.Session;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
 
 public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
 

@@ -1,20 +1,15 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.interfaces;
 
-import bg.sofia.uni.fmi.mjt.authentication.audit.AuditLog;
-import bg.sofia.uni.fmi.mjt.authentication.commands.Command;
-import bg.sofia.uni.fmi.mjt.authentication.model.user.User;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.request.AdminOperation;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.request.PasswordChange;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserRegistration;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserUpdate;
-import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
-import bg.sofia.uni.fmi.mjt.authentication.server.AuthenticationServerConfiguration;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.AdminOperation;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.PasswordChange;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.UserRegistration;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.UserUpdate;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.AdminOperator;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.LoginFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.LogoutFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.RegistratorFactory;
-import bg.sofia.uni.fmi.mjt.authentication.session.Session;
-import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.Session;
 
 import java.util.UUID;
 

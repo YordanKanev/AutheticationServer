@@ -1,25 +1,25 @@
 package bg.sofia.uni.fmi.mjt.authentication.server;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.function.Consumer;
 
-import bg.sofia.uni.fmi.mjt.authentication.audit.AuditConfiguration;
-import bg.sofia.uni.fmi.mjt.authentication.audit.AuditLog;
-import bg.sofia.uni.fmi.mjt.authentication.audit.change.AuditLogFactory;
-import bg.sofia.uni.fmi.mjt.authentication.commands.Command;
-import bg.sofia.uni.fmi.mjt.authentication.commands.CommandFactory;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
-import bg.sofia.uni.fmi.mjt.authentication.model.web.response.Response;
-import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepositoryFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditConfiguration;
+import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditLog;
+import bg.sofia.uni.fmi.mjt.authentication.server.audit.change.AuditLogFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.commands.Command;
+import bg.sofia.uni.fmi.mjt.authentication.server.commands.CommandFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
+import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepositoryFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AuthenticationEngine;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
-import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Registrator;
 import bg.sofia.uni.fmi.mjt.authentication.server.locker.LoginLocker;
 import bg.sofia.uni.fmi.mjt.authentication.server.locker.LoginLockerFactory;
-import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
-import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
-import bg.sofia.uni.fmi.mjt.authentication.session.SessionStoreFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
+import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepository;
+import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStoreFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.webserver.WebServer;
+import bg.sofia.uni.fmi.mjt.authentication.server.webserver.WebServerBuilder;
 
 public class AuthenticationServer implements AuthenticationController {
 
