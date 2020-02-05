@@ -6,8 +6,9 @@ import bg.sofia.uni.fmi.mjt.authentication.audit.Issuer;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.ResponseFactory;
-import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.IssuerProvider;
+import bg.sofia.uni.fmi.mjt.authentication.server.AuthenticationServerConfiguration;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Login;
+import bg.sofia.uni.fmi.mjt.authentication.server.locker.LoginLocker;
 import org.apache.commons.cli.*;
 
 import java.util.UUID;
@@ -29,13 +30,16 @@ public class LoginCommand extends BasicCommand {
     private Login login;
     private AuditLog auditLog;
     private Issuer issuer;
-
+    private LoginLocker loginLocker;
     private boolean tryLoginWithCredentials;
     private boolean tryLoginWithSessionId;
 
-    public LoginCommand(Request request, Login login, AuditLog auditLog) throws ParseException {
+    public LoginCommand(Request request,
+                        Login login,
+                        AuditLog auditLog,
+                        LoginLocker loginLocker) throws ParseException {
         super(request);
-        if(request == null || login == null || auditLog == null){
+        if(request == null || login == null || auditLog == null || loginLocker == null){
             //TODO: set message
             throw new IllegalArgumentException();
         }
@@ -57,6 +61,7 @@ public class LoginCommand extends BasicCommand {
         String identifier = tryLoginWithCredentials ? username : sessionId;
         this.login = login;
         this.auditLog = auditLog;
+        this.loginLocker = loginLocker;
         this.issuer = new Issuer() {
             @Override
             public String getIdentifier() {
@@ -72,6 +77,9 @@ public class LoginCommand extends BasicCommand {
     @Override
     public Response execute() {
         try{
+            if(loginLocker.isLocked(issuer.getIPAddress())){
+                return ResponseFactory.error(LoginLocker.LOCKED_MESSAGE);
+            }
             UUID sessionId;
             if(tryLoginWithCredentials){
                 sessionId = login.login(username,password);
@@ -80,6 +88,7 @@ public class LoginCommand extends BasicCommand {
             }
             if(sessionId == null){
                 auditLog.log(EntryFactory.failedLogin(issuer));
+                loginLocker.incrementAttempt(issuer.getIPAddress());
                 return ResponseFactory.error(LOGIN_FAILED_MESSAGE);
             }
             return ResponseFactory.success(sessionId.toString());

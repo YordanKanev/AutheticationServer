@@ -6,15 +6,20 @@ import java.util.function.Consumer;
 
 import bg.sofia.uni.fmi.mjt.authentication.audit.AuditConfiguration;
 import bg.sofia.uni.fmi.mjt.authentication.audit.AuditLog;
+import bg.sofia.uni.fmi.mjt.authentication.audit.change.AuditLogFactory;
 import bg.sofia.uni.fmi.mjt.authentication.commands.Command;
 import bg.sofia.uni.fmi.mjt.authentication.commands.CommandFactory;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.response.Response;
+import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepositoryFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AuthenticationEngine;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Registrator;
+import bg.sofia.uni.fmi.mjt.authentication.server.locker.LoginLocker;
+import bg.sofia.uni.fmi.mjt.authentication.server.locker.LoginLockerFactory;
 import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
 import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
+import bg.sofia.uni.fmi.mjt.authentication.session.SessionStoreFactory;
 
 public class AuthenticationServer implements AuthenticationController {
 
@@ -27,6 +32,8 @@ public class AuthenticationServer implements AuthenticationController {
     private UserRepository userRepository;
     private AuthenticationServerConfiguration configuration;
     private AuditConfiguration auditConfiguration;
+    private LoginLocker loginLocker;
+    private CommandExecutor commandExecutor;
     private AuthenticationEngine authenticationEngine = new AuthenticationEngine() {
         @Override
         public UserRepository getUserRepository() {
@@ -48,7 +55,6 @@ public class AuthenticationServer implements AuthenticationController {
             return configuration;
         }
     };
-    private Registrator registrator;
 
     public AuthenticationServer(AuthenticationServerConfiguration configuration, AuditConfiguration auditConfiguration) throws IOException {
         if (configuration == null || auditConfiguration == null) {
@@ -57,7 +63,12 @@ public class AuthenticationServer implements AuthenticationController {
         }
         this.configuration = configuration;
         this.auditConfiguration = auditConfiguration;
-        WebServer webServer = WebServerBuilder.defaultWebServerBuilder().build(this);
+        this.auditLog = AuditLogFactory.getInstance(auditConfiguration);
+        this.userRepository = UserRepositoryFactory.getInstance();
+        this.sessionStore = SessionStoreFactory.getInstance();
+        this.webServer = WebServerBuilder.defaultWebServerBuilder().build(this);
+        this.commandExecutor = CommandExecutor.defaultExecutor(authenticationEngine);
+        this.loginLocker = LoginLockerFactory.getInstance(configuration);
     }
 
     public static AuthenticationServer defaultAuthenticationServer() throws IOException {
@@ -83,8 +94,9 @@ public class AuthenticationServer implements AuthenticationController {
             return;
         }
         Command command = CommandFactory.getInstance(request,
-                CommandExecutor.defaultExecutor(authenticationEngine),
-                authenticationEngine);
+                commandExecutor,
+                authenticationEngine,
+                loginLocker);
         Response response = command.execute();
         consumer.accept(response);
     }

@@ -14,6 +14,13 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
     private UserRepository userRepository;
     private SessionStore sessionStore;
 
+    private AdminOperator(UserRepository userRepository, SessionStore sessionStore){
+        if(userRepository == null || sessionStore == null){
+            throw new IllegalArgumentException();
+        }
+        this.userRepository = userRepository;
+        this.sessionStore = sessionStore;
+    }
     private boolean hasPermission(AdminOperation adminOperation){
         if(adminOperation == null){
             return false;
@@ -66,5 +73,17 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
             return null;
         }
         return userRepository.delete(user);
+    }
+
+    public static AdminCreator getAdminCreator(UserRepository userRepository,SessionStore sessionStore){
+        return new AdminOperator(userRepository,sessionStore);
+    }
+
+    public static AdminRemover getAdminRemover(UserRepository userRepository, SessionStore sessionStore) {
+        return new AdminOperator(userRepository,sessionStore);
+    }
+
+    public static UserDeleter getUserDeleter(UserRepository userRepository, SessionStore sessionStore) {
+        return new AdminOperator(userRepository,sessionStore);
     }
 }

@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public interface AuthenticationServerConfiguration {
 
-	long DEFAULT_LOCK_TIME = 30000;
+	long DEFAULT_LOCK_TIME = 10;//seconds
 	int DEFAULT_LOGIN_ATTEMPTS_COUNT = 3;
 
 	long getLockTime();

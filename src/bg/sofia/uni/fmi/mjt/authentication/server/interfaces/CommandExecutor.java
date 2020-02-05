@@ -8,6 +8,8 @@ import bg.sofia.uni.fmi.mjt.authentication.model.web.request.PasswordChange;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserRegistration;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserUpdate;
 import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
+import bg.sofia.uni.fmi.mjt.authentication.server.AuthenticationServerConfiguration;
+import bg.sofia.uni.fmi.mjt.authentication.server.implementation.AdminOperator;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.LoginFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.LogoutFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.RegistratorFactory;
@@ -29,18 +31,25 @@ public interface CommandExecutor extends Registrator,
         if(authenticationEngine == null){
             throw new IllegalArgumentException();
         }
-        Login login = LoginFactory.getInstance(authenticationEngine.getUserRepository(), authenticationEngine.getSessionStore());
+        Login login = LoginFactory.getInstance(authenticationEngine.getUserRepository(),
+                authenticationEngine.getSessionStore());
         Registrator registrator = RegistratorFactory.getInstance(authenticationEngine.getUserRepository());
         Logout logout = LogoutFactory.getInstance(authenticationEngine.getSessionStore());
+        AdminCreator adminCreator = AdminOperator.getAdminCreator(authenticationEngine.getUserRepository(),
+                authenticationEngine.getSessionStore());
+        AdminRemover adminRemover = AdminOperator.getAdminRemover(authenticationEngine.getUserRepository(),
+                authenticationEngine.getSessionStore());
+        UserDeleter userDeleter = AdminOperator.getUserDeleter(authenticationEngine.getUserRepository(),
+                authenticationEngine.getSessionStore());
         return new CommandExecutor() {
             @Override
-            public void createAdmin(AdminOperation user) {
-
+            public User createAdmin(AdminOperation adminOperation) {
+                return adminCreator.createAdmin(adminOperation);
             }
 
             @Override
-            public void removeAdmin(AdminOperation adminOperation) {
-
+            public User removeAdmin(AdminOperation adminOperation) {
+                return adminRemover.removeAdmin(adminOperation);
             }
 
             @Override
@@ -69,8 +78,8 @@ public interface CommandExecutor extends Registrator,
             }
 
             @Override
-            public void deleteUser(AdminOperation adminOperation) {
-
+            public User deleteUser(AdminOperation adminOperation) {
+                return userDeleter.deleteUser(adminOperation);
             }
 
             @Override
