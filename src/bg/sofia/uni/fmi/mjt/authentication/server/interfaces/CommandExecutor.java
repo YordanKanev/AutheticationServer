@@ -9,6 +9,7 @@ import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserRegistration;
 import bg.sofia.uni.fmi.mjt.authentication.model.web.request.UserUpdate;
 import bg.sofia.uni.fmi.mjt.authentication.repository.UserRepository;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.LoginFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.implementation.LogoutFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.implementation.RegistratorFactory;
 import bg.sofia.uni.fmi.mjt.authentication.session.Session;
 import bg.sofia.uni.fmi.mjt.authentication.session.SessionStore;
@@ -30,6 +31,7 @@ public interface CommandExecutor extends Registrator,
         }
         Login login = LoginFactory.getInstance(authenticationEngine.getUserRepository(), authenticationEngine.getSessionStore());
         Registrator registrator = RegistratorFactory.getInstance(authenticationEngine.getUserRepository());
+        Logout logout = LogoutFactory.getInstance(authenticationEngine.getSessionStore());
         return new CommandExecutor() {
             @Override
             public void createAdmin(AdminOperation user) {
@@ -53,7 +55,7 @@ public interface CommandExecutor extends Registrator,
 
             @Override
             public Session logout(UUID sessionId) {
-                return null;
+                return logout.logout(sessionId);
             }
 
             @Override

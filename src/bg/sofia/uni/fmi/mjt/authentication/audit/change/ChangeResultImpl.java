@@ -10,7 +10,7 @@ public class ChangeResultImpl implements ChangeResult {
 
     @Override
     public boolean isSuccessful() {
-        return false;
+        return successfull;
     }
 
     private void setSuccessfull(boolean successfull){

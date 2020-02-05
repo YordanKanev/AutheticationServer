@@ -30,6 +30,9 @@ public class LoginCommand extends BasicCommand {
     private AuditLog auditLog;
     private Issuer issuer;
 
+    private boolean tryLoginWithCredentials;
+    private boolean tryLoginWithSessionId;
+
     public LoginCommand(Request request, Login login, AuditLog auditLog) throws ParseException {
         super(request);
         if(request == null || login == null || auditLog == null){
@@ -46,15 +49,29 @@ public class LoginCommand extends BasicCommand {
         password = commandLine.getOptionValue(optionPassword.getLongOpt());
         sessionId = commandLine.getOptionValue(optionSessionId.getLongOpt());
 
+        tryLoginWithCredentials = username != null && password != null;
+        tryLoginWithSessionId = sessionId != null;
+        if(!tryLoginWithCredentials && !tryLoginWithSessionId){
+            throw new IllegalArgumentException();
+        }
+        String identifier = tryLoginWithCredentials ? username : sessionId;
         this.login = login;
         this.auditLog = auditLog;
-        this.issuer = issuer;
+        this.issuer = new Issuer() {
+            @Override
+            public String getIdentifier() {
+                return identifier;
+            }
+
+            @Override
+            public String getIPAddress() {
+                return request.getIPAddress();
+            }
+        };
     }
     @Override
     public Response execute() {
         try{
-            boolean tryLoginWithCredentials = username != null && password != null;
-            boolean tryLoginWithSessionId = sessionId != null;
             UUID sessionId;
             if(tryLoginWithCredentials){
                 sessionId = login.login(username,password);

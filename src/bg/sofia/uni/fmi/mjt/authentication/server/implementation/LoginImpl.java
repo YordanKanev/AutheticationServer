@@ -24,6 +24,9 @@ class LoginImpl implements Login {
 
     @Override
     public UUID login(UUID sessionId) {
+        if(sessionId == null) {
+            throw new IllegalArgumentException();
+        }
         return sessionStore.refreshSession(sessionId);
     }
 

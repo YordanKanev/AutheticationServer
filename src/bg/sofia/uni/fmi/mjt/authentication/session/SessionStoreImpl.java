@@ -127,4 +127,12 @@ public class SessionStoreImpl implements SessionStore {
         }
         return usernameToSession.remove(session.getUsername());
     }
+
+    @Override
+    public Session getSession(UUID sessionId) {
+        if(sessionId == null){
+            throw new IllegalArgumentException();
+        }
+        return sessionIdToSession.get(sessionId);
+    }
 }

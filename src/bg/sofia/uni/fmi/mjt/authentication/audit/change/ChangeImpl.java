@@ -11,12 +11,12 @@ public class ChangeImpl implements Change {
     }
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
     public boolean areRightsAdded() {
-        return false;
+        return rightsAdded;
     }
 
     private void setUsername(String username){

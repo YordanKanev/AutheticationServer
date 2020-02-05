@@ -10,4 +10,5 @@ public interface SessionStore {
 	UUID refreshSession(UUID sessionId);
 	Session deleteSession(String username);
 	Session deleteSession(UUID sessionId);
+	Session getSession(UUID sessionId);
 }
