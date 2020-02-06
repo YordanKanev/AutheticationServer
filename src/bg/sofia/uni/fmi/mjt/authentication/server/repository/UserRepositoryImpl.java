@@ -1,11 +1,17 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.repository;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptor;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptorInterfaceAdapter;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.UserInterfaceAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -15,7 +21,10 @@ class UserRepositoryImpl implements UserRepository {
     public static final String USERNAME_NULL_EXCEPTION_MESSAGE = "Username is null";
 
     private static final String DATA_FILE_EXTENSION = ".dat";
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(User.class, new UserInterfaceAdapter())
+            .registerTypeAdapter(PasswordEncryptor.class, new PasswordEncryptorInterfaceAdapter())
+            .create();
 
     @Override
     public User delete(User user) {
@@ -62,7 +71,8 @@ class UserRepositoryImpl implements UserRepository {
         Path filePath = getFilePath(username);
         try {
             Reader reader = new FileReader(filePath.toString());
-            User user = GSON.fromJson(reader, User.class);
+            Type userType = new TypeToken<User>() {}.getType();
+            User user = GSON.fromJson(reader, userType);
             return user;
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +85,7 @@ class UserRepositoryImpl implements UserRepository {
         if (user == null) {
             throw new IllegalArgumentException(USER_NULL_EXCEPTION_MESSAGE);
         }
-        String json = GSON.toJson(user);
+        String json = GSON.toJson(user, User.class);
         String username = user.getUsername();
         Path filePath = getFilePath(username);
         try {

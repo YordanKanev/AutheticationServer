@@ -7,6 +7,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepository;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Registrator;
 
 class RegistratorImpl implements Registrator {
+    public static final String USER_ALREADY_EXIST_MESSAGE = "User already exist";
 
     private UserRepository userRepository;
 
@@ -24,7 +25,7 @@ class RegistratorImpl implements Registrator {
             throw new IllegalArgumentException();
         }
         if(userRepository.exists(userRegistration.getUsername())){
-            //TODO: throw exception
+            throw new IllegalArgumentException(USER_ALREADY_EXIST_MESSAGE);
         }
         User user = UserFactory.getInstance(userRegistration.getUsername(),
                 userRegistration.getFirstName(),

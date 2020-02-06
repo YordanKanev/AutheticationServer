@@ -7,7 +7,7 @@ import org.apache.commons.cli.DefaultParser;
 public abstract class BasicCommand implements Command{
 
     protected Request request;
-    protected static final CommandLineParser parser = new DefaultParser();
+    protected final CommandLineParser parser = new DefaultParser();
 
     protected BasicCommand(Request request){
         if(request == null){

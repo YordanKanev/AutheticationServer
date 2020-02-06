@@ -5,6 +5,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -64,34 +65,40 @@ public class WebServerImpl implements WebServer {
                             SocketChannel sc = (SocketChannel) key.channel();
 
                             requestByteBuffer.clear();
-                            int r = sc.read(requestByteBuffer);
-                            if (r <= 0) {
-                                sc.close();
-                            } else {
-                                String request = new String(requestByteBuffer.array(), 0, requestByteBuffer.limit());
-                                String ipAddress = sc.getRemoteAddress().toString();
-                                authenticationController.onRequest(new Request() {
-                                    @Override
-                                    public String getRequestBody() {
-                                        return request;
-                                    }
+                            try{
+                                int r = sc.read(requestByteBuffer);
+                                if (r <= 0) {
+                                    sc.close();
+                                } else {
+                                    String request = new String(requestByteBuffer.array(), 0, requestByteBuffer.limit());
+                                    String ipAddress = sc.getRemoteAddress().toString();
+                                    authenticationController.onRequest(new Request() {
+                                        @Override
+                                        public String getRequestBody() {
+                                            return request;
+                                        }
 
-                                    @Override
-                                    public String getIPAddress() {
-                                        return ipAddress;
-                                    }
-                                }, (response) -> {
-                                    String message = response.getResponseMessage();
-                                    responseByteBuffer.clear();
-                                    responseByteBuffer.put(message.getBytes());
-                                    responseByteBuffer.flip();
-                                    try {
-                                        sc.write(responseByteBuffer);
-                                    } catch (IOException e) {
-                                        // TODO Auto-generated catch block
-                                        e.printStackTrace();
-                                    }
-                                });
+                                        @Override
+                                        public String getIPAddress() {
+                                            return ipAddress;
+                                        }
+                                    }, (response) -> {
+                                        String message = response.getResponseMessage();
+                                        responseByteBuffer.clear();
+                                        responseByteBuffer.put(message.getBytes());
+                                        responseByteBuffer.flip();
+                                        try {
+                                            sc.write(responseByteBuffer);
+                                        } catch (IOException e) {
+                                            // TODO Auto-generated catch block
+                                            e.printStackTrace();
+                                        }
+                                    });
+                                }
+                            }catch (SocketException e){
+                                e.printStackTrace();
+                                keyIterator.remove();
+                                continue;
                             }
                         } else if (key.isAcceptable()) {
                             ServerSocketChannel sockChannel = (ServerSocketChannel) key.channel();
@@ -103,7 +110,7 @@ public class WebServerImpl implements WebServer {
                         keyIterator.remove();
                     }
                 }
-            } catch (Exception e) {
+            }catch (Exception e) {
                 throw new RuntimeException();
             }
 
@@ -143,6 +150,7 @@ public class WebServerImpl implements WebServer {
         selector = Selector.open();
         ssc.register(selector, SelectionKey.OP_ACCEPT);
         requestByteBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+        responseByteBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         new Thread(requestHandler).start();
         started = true;
     }

@@ -5,20 +5,28 @@ import org.apache.commons.cli.Option;
 public interface CommandOptions {
 
     Option.Builder usernameBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.USERNAME);
     Option.Builder passwordBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.PASSWORD);
     Option.Builder oldPasswordBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.OLD_PASSWORD);
     Option.Builder newPasswordBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.NEW_PASSWORD);
     Option.Builder firstNameBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.FIRST_NAME);
     Option.Builder lastNameBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.LAST_NAME);
     Option.Builder emailBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.EMAIL);
     Option.Builder sessionIdBuilder = Option.builder()
+            .hasArg(true)
             .longOpt(CommandFactory.CommandParameters.SESSION_ID);
 
     Option optionUsername = usernameBuilder

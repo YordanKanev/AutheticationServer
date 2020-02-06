@@ -10,6 +10,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.commands.Command;
 import bg.sofia.uni.fmi.mjt.authentication.server.commands.CommandFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
+import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.ResponseFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepositoryFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AuthenticationEngine;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
@@ -93,11 +94,15 @@ public class AuthenticationServer implements AuthenticationController {
         if (request == null) {
             return;
         }
-        Command command = CommandFactory.getInstance(request,
-                commandExecutor,
-                authenticationEngine,
-                loginLocker);
-        Response response = command.execute();
-        consumer.accept(response);
+        try{
+            Command command = CommandFactory.getInstance(request,
+                    commandExecutor,
+                    authenticationEngine,
+                    loginLocker);
+            Response response = command.execute();
+            consumer.accept(response);
+        }catch (Exception e){
+            consumer.accept(ResponseFactory.error("Internal error."));
+        }
     }
 }

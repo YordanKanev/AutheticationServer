@@ -44,8 +44,9 @@ class LoginImpl implements Login {
             if(user.verifyPassword(password)){
                 UUID sessionId = sessionStore.refreshSession(username);
                 if(sessionId == null){
-                    return sessionStore.createSession(username);
+                    sessionId = sessionStore.createSession(username);
                 }
+                return sessionId;
             }
         }
         return null;
