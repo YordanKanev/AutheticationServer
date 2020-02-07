@@ -103,12 +103,11 @@ class BasicUser implements User {
 
     @Override
     public boolean verifyPassword(String password) {
-        return true;
-        /*if(password == null){
+        if(password == null){
             throw new IllegalArgumentException(PASSWORD_NULL_EXCEPTION_MESSAGE);
         }
         String hashed = passwordEncryptor.hashPassword(password);
-        return hashed.equals(this.password);*/
+        return hashed.equals(this.password);
     }
 
     private void setPasswordEncryptor(PasswordEncryptor passwordEncryptor){

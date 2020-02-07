@@ -39,6 +39,7 @@ public class WebServerImpl implements WebServer {
         public void run() {
             try {
                 while (true) {
+                    int readyChannels = selector.selectNow();
                     if (stopped) {
                         ssc.close();
                         selector.close();
@@ -46,7 +47,6 @@ public class WebServerImpl implements WebServer {
                         responseByteBuffer.clear();
                         return;
                     }
-                    int readyChannels = selector.select();
                     if (readyChannels == 0) {
                         try {
                             Thread.sleep(SLEEP_MILLIS);
