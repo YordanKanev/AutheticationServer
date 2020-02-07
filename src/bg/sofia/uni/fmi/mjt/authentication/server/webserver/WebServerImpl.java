@@ -70,7 +70,9 @@ public class WebServerImpl implements WebServer {
                                 if (r <= 0) {
                                     sc.close();
                                 } else {
-                                    String request = new String(requestByteBuffer.array(), 0, requestByteBuffer.limit());
+                                    //read buffer to position not limit because UUID cannot be created from the sessionId, because of the
+                                    //byte length
+                                    String request = new String(requestByteBuffer.array(), 0, requestByteBuffer.position());
                                     String ipAddress = sc.getRemoteAddress().toString();
                                     authenticationController.onRequest(new Request() {
                                         @Override

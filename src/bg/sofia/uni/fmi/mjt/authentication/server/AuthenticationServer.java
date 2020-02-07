@@ -102,7 +102,7 @@ public class AuthenticationServer implements AuthenticationController {
             Response response = command.execute();
             consumer.accept(response);
         }catch (Exception e){
-            consumer.accept(ResponseFactory.error("Internal error."));
+            consumer.accept(ResponseFactory.error(e.getMessage()));
         }
     }
 }

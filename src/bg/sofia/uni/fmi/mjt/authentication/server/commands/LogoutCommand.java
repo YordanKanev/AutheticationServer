@@ -42,7 +42,7 @@ public class LogoutCommand extends BasicCommand implements Secured {
     @Override
     public Response execute() {
         try{
-            Session session = sessionStore.deleteSession(sessionId);
+            Session session = sessionStore.deleteSession(UUID.fromString(sessionId));
             if(session != null){
                 return ResponseFactory.success(LOGOUT_SUCCESS_MESSAGE);
             }else{

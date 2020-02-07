@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.model.user;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptor;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptorFactory;
 
 import java.util.Objects;
 
@@ -12,18 +13,22 @@ class BasicUser implements User {
     private String email;
     private String password;
     private boolean admin;
-    private PasswordEncryptor passwordEncryptor;
+    private transient PasswordEncryptor passwordEncryptor;
 
+    public BasicUser(){
+        this.passwordEncryptor = PasswordEncryptorFactory.getInstance();
+    }
     public BasicUser(String username, String password,
                      String firstName, String lastName, String email,
                      boolean admin, PasswordEncryptor passwordEncryptor){
+        setPasswordEncryptor(passwordEncryptor);
         setUsername(username);
         setPassword(password);
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
         setAdmin(admin);
-        setPasswordEncryptor(passwordEncryptor);
+
     }
 
     @Override
@@ -75,6 +80,7 @@ class BasicUser implements User {
         if(email == null){
             throw new IllegalArgumentException(EMAIL_NULL_EXCEPTION_MESSAGE);
         }
+        this.email = email;
     }
 
     @Override
@@ -97,11 +103,12 @@ class BasicUser implements User {
 
     @Override
     public boolean verifyPassword(String password) {
-        if(password == null){
+        return true;
+        /*if(password == null){
             throw new IllegalArgumentException(PASSWORD_NULL_EXCEPTION_MESSAGE);
         }
-        return passwordEncryptor.hashPassword(password)
-                .equals(this.password);
+        String hashed = passwordEncryptor.hashPassword(password);
+        return hashed.equals(this.password);*/
     }
 
     private void setPasswordEncryptor(PasswordEncryptor passwordEncryptor){

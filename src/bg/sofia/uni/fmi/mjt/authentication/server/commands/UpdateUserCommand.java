@@ -7,10 +7,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.ResponseFac
 import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepository;
 import bg.sofia.uni.fmi.mjt.authentication.server.session.Session;
 import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 import java.util.UUID;
 
@@ -20,15 +17,15 @@ public class UpdateUserCommand extends BasicCommand implements Secured {
     public static final String USER_NOT_UPDATED_MESSAGE = "User not updated";
 
     private static Option optionSessionId = CommandOptions.requiredOptionSessionId;
-    private static Option optionUsername = CommandOptions.optionUsername;
-    private static Option optionFirstName = CommandOptions.optionFirstName;
-    private static Option optionLastName = CommandOptions.optionLastName;
-    private static Option optionEmail = CommandOptions.optionEmail;
+    private static Option optionNewUsername = CommandOptions.optionNewUsername;
+    private static Option optionNewFirstName = CommandOptions.optionNewFirstName;
+    private static Option optionNewLastName = CommandOptions.optionNewLastName;
+    private static Option optionNewEmail = CommandOptions.optionNewEmail;
     private static Options options = new Options().addOption(optionSessionId)
-            .addOption(optionUsername)
-            .addOption(optionFirstName)
-            .addOption(optionLastName)
-            .addOption(optionEmail);
+            .addOption(optionNewUsername)
+            .addOption(optionNewFirstName)
+            .addOption(optionNewLastName)
+            .addOption(optionNewEmail);
 
     private String sessionId;
     private String username;
@@ -50,10 +47,10 @@ public class UpdateUserCommand extends BasicCommand implements Secured {
         }
         CommandLine commandLine = parser.parse(options, words);
         this.sessionId = commandLine.getOptionValue(optionSessionId.getLongOpt());
-        this.username = commandLine.getOptionValue(optionUsername.getLongOpt());
-        this.firstName = commandLine.getOptionValue(optionFirstName.getLongOpt());
-        this.lastName = commandLine.getOptionValue(optionLastName.getLongOpt());
-        this.email = commandLine.getOptionValue(optionEmail.getLongOpt());
+        this.username = commandLine.getOptionValue(optionNewUsername.getLongOpt());
+        this.firstName = commandLine.getOptionValue(optionNewFirstName.getLongOpt());
+        this.lastName = commandLine.getOptionValue(optionNewLastName.getLongOpt());
+        this.email = commandLine.getOptionValue(optionNewEmail.getLongOpt());
 
         this.userRepository = userRepository;
         this.sessionStore = sessionStore;
@@ -62,7 +59,7 @@ public class UpdateUserCommand extends BasicCommand implements Secured {
     @Override
     public Response execute() {
         try{
-            if(!sessionStore.hasActiveSession(sessionId)){
+            if(!sessionStore.hasActiveSession(UUID.fromString(sessionId))){
                 return ResponseFactory.error(Secured.INVALID_SESSION_ID_MESSAGE);
             }
             Session session = sessionStore.getSession(getSessionId());

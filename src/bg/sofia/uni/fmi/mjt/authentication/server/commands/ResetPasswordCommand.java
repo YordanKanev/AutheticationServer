@@ -57,7 +57,7 @@ public class ResetPasswordCommand extends BasicCommand implements Secured {
     @Override
     public Response execute() {
         try{
-            if(!sessionStore.hasActiveSession(sessionId)){
+            if(!sessionStore.hasActiveSession(UUID.fromString(sessionId))){
                 return ResponseFactory.error(Secured.INVALID_SESSION_ID_MESSAGE);
             }
             User user = userRepository.findOne(username);

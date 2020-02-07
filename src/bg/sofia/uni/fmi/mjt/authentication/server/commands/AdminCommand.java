@@ -35,7 +35,7 @@ public abstract class AdminCommand extends BasicCommand implements Secured {
         this.adminOperation = new AdminOperation() {
             @Override
             public UUID getSessionId() {
-                return getSessionId();
+                return UUID.fromString(sessionId);
             }
 
             @Override

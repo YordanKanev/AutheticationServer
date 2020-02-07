@@ -47,18 +47,18 @@ public class SessionStoreImpl implements SessionStore {
         expirations.put(session.getSessionId(), scheduledFuture);
     }
 
+    private boolean cancelExpiration(Session session){
+        ScheduledFuture scheduledFuture = expirations.remove(session.getSessionId());
+        if (scheduledFuture == null) {
+            return false;
+        }
+        return scheduledFuture.cancel(false);
+    }
     private UUID refreshSession(Session session) {
         if (session == null) {
             return null;
         }
-        ScheduledFuture scheduledFuture = expirations.remove(session.getSessionId());
-        if (scheduledFuture == null) {
-            return null;
-        }
-        boolean canceled = scheduledFuture.cancel(false);
-        if (!canceled) {
-            return null;
-        }
+        cancelExpiration(session);
         setExpiration(session);
         return session.getSessionId();
     }
@@ -89,7 +89,7 @@ public class SessionStoreImpl implements SessionStore {
             //TODO: set message
             throw new IllegalArgumentException();
         }
-        return usernameToSession.contains(username);
+        return usernameToSession.containsKey(username);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class SessionStoreImpl implements SessionStore {
             //TODO: set message
             throw new IllegalArgumentException();
         }
-        return sessionIdToSession.contains(sessionId);
+        return sessionIdToSession.containsKey(sessionId);
     }
 
     @Override
@@ -111,7 +111,12 @@ public class SessionStoreImpl implements SessionStore {
         if (session == null) {
             return null;
         }
-        return sessionIdToSession.remove(session.getSessionId());
+        Session deleted = sessionIdToSession.remove(session.getSessionId());
+        if(deleted == null){
+            return null;
+        }
+        cancelExpiration(session);
+        return deleted;
     }
 
     @Override
@@ -124,7 +129,12 @@ public class SessionStoreImpl implements SessionStore {
         if (session == null) {
             return null;
         }
-        return usernameToSession.remove(session.getUsername());
+        Session deleted = usernameToSession.remove(session.getUsername());
+        if(deleted == null){
+            return  null;
+        }
+        cancelExpiration(session);
+        return deleted;
     }
 
     @Override

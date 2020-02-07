@@ -72,7 +72,12 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
         if(user == null){
             return null;
         }
-        return userRepository.delete(user);
+        User deleted = userRepository.delete(user);
+        if(deleted == null){
+            return null;
+        }
+        sessionStore.deleteSession(adminOperation.getUsername());
+        return deleted;
     }
 
     public static AdminCreator getAdminCreator(UserRepository userRepository,SessionStore sessionStore){

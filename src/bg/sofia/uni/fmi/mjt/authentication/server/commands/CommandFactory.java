@@ -4,6 +4,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AuthenticationEngine;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
 import bg.sofia.uni.fmi.mjt.authentication.server.locker.LoginLocker;
+import org.apache.commons.cli.ParseException;
 
 public interface CommandFactory {
     //Commands
@@ -26,12 +27,16 @@ public interface CommandFactory {
         String LAST_NAME = "last-name";
         String EMAIL = "email";
         String SESSION_ID = "session-id";
+        String NEW_EMAIL = "new-email";
+        String NEW_USERNAME = "new-username";
+        String NEW_FIRST_NAME = "new-first-name";
+        String NEW_LAST_NAME = "new-last-name";
     }
 
     static Command getInstance(Request request,
                                CommandExecutor commandExecutor,
                                AuthenticationEngine authenticationEngine,
-                               LoginLocker loginLocker) {
+                               LoginLocker loginLocker) throws ParseException {
         if (request == null || commandExecutor == null || authenticationEngine == null) {
             //TODO: set message
             throw new IllegalArgumentException();
@@ -42,52 +47,48 @@ public interface CommandFactory {
             //TODO: throw exception
         }
 
-        try {
-            switch (words[0]) {
-                case REGISTER:
-                    result = new RegisterCommand(request,
-                            commandExecutor,
-                            commandExecutor);
-                    break;
-                case LOGIN:
-                    result = new LoginCommand(request,
-                            commandExecutor,
-                            authenticationEngine.getAuditLog(),
-                            loginLocker);
-                    break;
-                case UPDATE_USER:
-                    result = new UpdateUserCommand(request,
-                            authenticationEngine.getUserRepository(),
-                            authenticationEngine.getSessionStore());
-                    break;
-                case RESET_PASSWORD:
-                    result = new ResetPasswordCommand(request,
-                            authenticationEngine.getUserRepository(),
-                            authenticationEngine.getSessionStore());
-                    break;
-                case LOGOUT:
-                    result = new LogoutCommand(request,
-                            authenticationEngine.getSessionStore());
-                    break;
-                case ADD_ADMIN_USER:
-                    result = new CreateAdminCommand(request,
-                            commandExecutor,
-                            authenticationEngine.getAuditLog());
-                    break;
-                case REMOVED_ADMIN_USER:
-                    result = new RemoveAdminCommand(request,
-                            commandExecutor,
-                            authenticationEngine.getAuditLog());
-                    break;
-                case DELETE_USER:
-                    result = new DeleteUserCommand(request,
-                            commandExecutor);
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        switch (words[0]) {
+            case REGISTER:
+                result = new RegisterCommand(request,
+                        commandExecutor,
+                        commandExecutor);
+                break;
+            case LOGIN:
+                result = new LoginCommand(request,
+                        commandExecutor,
+                        authenticationEngine.getAuditLog(),
+                        loginLocker);
+                break;
+            case UPDATE_USER:
+                result = new UpdateUserCommand(request,
+                        authenticationEngine.getUserRepository(),
+                        authenticationEngine.getSessionStore());
+                break;
+            case RESET_PASSWORD:
+                result = new ResetPasswordCommand(request,
+                        authenticationEngine.getUserRepository(),
+                        authenticationEngine.getSessionStore());
+                break;
+            case LOGOUT:
+                result = new LogoutCommand(request,
+                        authenticationEngine.getSessionStore());
+                break;
+            case ADD_ADMIN_USER:
+                result = new CreateAdminCommand(request,
+                        commandExecutor,
+                        authenticationEngine.getAuditLog());
+                break;
+            case REMOVED_ADMIN_USER:
+                result = new RemoveAdminCommand(request,
+                        commandExecutor,
+                        authenticationEngine.getAuditLog());
+                break;
+            case DELETE_USER:
+                result = new DeleteUserCommand(request,
+                        commandExecutor);
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
         return result;
     }

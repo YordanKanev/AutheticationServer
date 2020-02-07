@@ -4,6 +4,9 @@
 # Log file
 *.log
 
+# Data file
+*.dat
+
 # BlueJ files
 *.ctxt
 
@@ -26,3 +29,4 @@ hs_err_pid*
 
 *.iml
 /.metadata/
+/out

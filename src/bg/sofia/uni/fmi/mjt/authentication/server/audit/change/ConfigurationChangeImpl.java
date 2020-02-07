@@ -17,7 +17,7 @@ public class ConfigurationChangeImpl extends BasicEntry implements Configuration
 
     @Override
     public UUID getOperationId() {
-        return null;
+        return operationId;
     }
 
     private void setOperationId(UUID operationId){
