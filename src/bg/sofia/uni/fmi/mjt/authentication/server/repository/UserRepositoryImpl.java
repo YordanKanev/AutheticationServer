@@ -3,10 +3,12 @@ package bg.sofia.uni.fmi.mjt.authentication.server.repository;
 import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptor;
-import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptorInterfaceAdapter;
-import bg.sofia.uni.fmi.mjt.authentication.server.utils.UserInterfaceAdapter;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.adapters.LocalDateTimeInterfaceAdapter;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.adapters.PasswordEncryptorInterfaceAdapter;
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.adapters.UserInterfaceAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileNotFoundException;
@@ -17,12 +19,10 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 class UserRepositoryImpl implements UserRepository {
     public static final String COUNT_NOT_SUPPORT_MESSAGE = "Method count of UserRepository is not supported.";
@@ -35,6 +35,7 @@ class UserRepositoryImpl implements UserRepository {
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(User.class, new UserInterfaceAdapter())
             .registerTypeAdapter(PasswordEncryptor.class, new PasswordEncryptorInterfaceAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeInterfaceAdapter())
             .create();
 
     public UserRepositoryImpl() throws IOException {

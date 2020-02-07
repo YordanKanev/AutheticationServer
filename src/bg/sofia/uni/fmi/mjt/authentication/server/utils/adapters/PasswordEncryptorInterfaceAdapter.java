@@ -1,5 +1,6 @@
-package bg.sofia.uni.fmi.mjt.authentication.server.utils;
+package bg.sofia.uni.fmi.mjt.authentication.server.utils.adapters;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptor;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

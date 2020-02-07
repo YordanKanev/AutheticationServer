@@ -1,4 +1,4 @@
-package bg.sofia.uni.fmi.mjt.authentication.server.utils;
+package bg.sofia.uni.fmi.mjt.authentication.server.utils.adapters;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import com.google.gson.*;
