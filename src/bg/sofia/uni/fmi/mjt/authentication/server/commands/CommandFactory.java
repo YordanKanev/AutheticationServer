@@ -33,6 +33,8 @@ public interface CommandFactory {
         String NEW_LAST_NAME = "new-last-name";
     }
 
+    String COMMAND_NOT_FOUND_MESSAGE = "Command not found";
+
     static Command getInstance(Request request,
                                CommandExecutor commandExecutor,
                                AuthenticationEngine authenticationEngine,
@@ -88,7 +90,7 @@ public interface CommandFactory {
                         commandExecutor);
                 break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(COMMAND_NOT_FOUND_MESSAGE);
         }
         return result;
     }

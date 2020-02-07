@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.audit.change;
 
-import bg.sofia.uni.fmi.mjt.authentication.server.audit.Issuer;
+import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.Issuer;
 
 import java.util.UUID;
 

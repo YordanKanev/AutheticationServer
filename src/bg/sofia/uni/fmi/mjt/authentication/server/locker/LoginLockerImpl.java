@@ -40,7 +40,7 @@ public class LoginLockerImpl implements LoginLocker {
             throw new IllegalArgumentException();
         }
         Integer attemptsCount = attempts.merge(ipAddress,1,Integer::sum);
-        if(attemptsCount > authenticationServerConfiguration.getLoginAttemptsCount()){
+        if(attemptsCount >= authenticationServerConfiguration.getLoginAttemptsCount()){
             LocalDateTime lockedTo = LocalDateTime.now().plusSeconds(authenticationServerConfiguration.getLockTime());
             locked.put(ipAddress,lockedTo);
         }

@@ -9,6 +9,12 @@ import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.UserDeleter;
 import bg.sofia.uni.fmi.mjt.authentication.server.session.Session;
 import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
 
     private UserRepository userRepository;
@@ -29,6 +35,10 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
             return false;
         }
         Session session = sessionStore.getSession(adminOperation.getSessionId());
+        return checkSessionPermission(session);
+    }
+
+    private boolean checkSessionPermission(Session session) {
         if(session == null){
             return false;
         }
@@ -58,9 +68,62 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
         return changeAdminRights(adminOperation, true);
     }
 
+    private User removeSelfRights(AdminOperation adminOperation){
+        Iterable<User> users = userRepository.findAll();
+        if(users == null){
+            return null;
+        }
+        Iterator<User> iterator = users.iterator();
+        int count = 0;
+        boolean match = false;
+        User userToUpdate = null;
+        while(iterator.hasNext()){
+            User user = iterator.next();
+            if(user.getUsername().equals(adminOperation.getUsername())){
+                match = true;
+                userToUpdate = user;
+            }
+            if(user.isAdmin()){
+                count++;
+            }
+            if(count > 1 && match){
+                break;
+            }
+            iterator.remove();
+        }
+        if(!match || count < 2){
+            return null;
+        }
+        if(userToUpdate == null){
+            return null;
+        }
+        userToUpdate.setAdmin(false);
+        return userRepository.save(userToUpdate);
+    }
+    private User removeOtherRights(AdminOperation adminOperation){
+        User user = userRepository.findOne(adminOperation.getUsername());
+        if(user == null){
+            return null;
+        }
+        user.setAdmin(false);
+        return userRepository.save(user);
+    }
     @Override
     public User removeAdmin(AdminOperation adminOperation) {
-        return changeAdminRights(adminOperation, false);
+        if(adminOperation == null){
+            throw new IllegalArgumentException();
+        }
+        Session session = sessionStore.getSession(adminOperation.getSessionId());
+        if(!checkSessionPermission(session)){
+            return null;
+        }
+        if(session.getUsername().equals(adminOperation.getUsername())){
+            //self remove rights
+            return removeSelfRights(adminOperation);
+        }else{
+            //remove rights of other
+            return removeOtherRights(adminOperation);
+        }
     }
 
     @Override

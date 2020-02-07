@@ -34,10 +34,11 @@ public class CreateAdminCommand extends AdminCommand {
         auditLog.log(configurationChange);
         return configurationChange;
     }
-    private void logFinishAction(StartedConfigurationChange startedConfigurationChange,boolean successful) {
+    private void logFinishAction(StartedConfigurationChange startedConfigurationChange,boolean successful) throws IOException {
         ChangeResult changeResult = ChangeResultFactory.getInstance(successful);
-        Entry configurationChange = ConfigurationChangeFactory.finishConfigurationChange(startedConfigurationChange,
+        FinishedConfigurationChange configurationChange = ConfigurationChangeFactory.finishConfigurationChange(startedConfigurationChange,
                 changeResult);
+        auditLog.log(configurationChange);
     }
     @Override
     public Response execute() {

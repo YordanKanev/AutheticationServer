@@ -28,8 +28,9 @@ public class DeleteUserCommand extends AdminCommand {
             Response response = null;
             if(user == null){
                 response = ResponseFactory.error(USER_NOT_DELETED_MESSAGE);
+            }else{
+                response = ResponseFactory.success(USER_DELETED_MESSAGE);
             }
-            response = ResponseFactory.success(USER_DELETED_MESSAGE);
             return response;
         }catch (Exception e){
             e.printStackTrace();

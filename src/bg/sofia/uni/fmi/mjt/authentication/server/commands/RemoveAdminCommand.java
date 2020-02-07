@@ -29,15 +29,16 @@ public class RemoveAdminCommand extends AdminCommand {
         this.auditLog = auditLog;
     }
     private StartedConfigurationChange logStartAction() throws IOException {
-        Change change = ChangeFactory.getInstance(this.adminOperation.getUsername(),false);
+        Change change = ChangeFactory.getInstance(this.adminOperation.getUsername(),true);
         StartedConfigurationChange configurationChange = ConfigurationChangeFactory.startConfigurationChange(change,issuer);
         auditLog.log(configurationChange);
         return configurationChange;
     }
-    private void logFinishAction(StartedConfigurationChange startedConfigurationChange,boolean successful) {
+    private void logFinishAction(StartedConfigurationChange startedConfigurationChange,boolean successful) throws IOException {
         ChangeResult changeResult = ChangeResultFactory.getInstance(successful);
-        Entry configurationChange = ConfigurationChangeFactory.finishConfigurationChange(startedConfigurationChange,
+        FinishedConfigurationChange configurationChange = ConfigurationChangeFactory.finishConfigurationChange(startedConfigurationChange,
                 changeResult);
+        auditLog.log(configurationChange);
     }
 
     @Override
@@ -48,8 +49,9 @@ public class RemoveAdminCommand extends AdminCommand {
             Response response = null;
             if(user == null){
                 response = ResponseFactory.error(ADMIN_NOT_REMOVED_MESSAGE);
+            }else{
+                response = ResponseFactory.success(ADMIN_REMOVED_MESSAGE);
             }
-            response = ResponseFactory.success(ADMIN_REMOVED_MESSAGE);
             logFinishAction(startedConfigurationChange,response.isSuccessful());
             return response;
         }catch (Exception e){

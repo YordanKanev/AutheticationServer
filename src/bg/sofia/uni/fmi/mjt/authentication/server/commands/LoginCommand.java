@@ -2,7 +2,8 @@ package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditLog;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.EntryFactory;
-import bg.sofia.uni.fmi.mjt.authentication.server.audit.Issuer;
+import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.Issuer;
+import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.IssuerFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.ResponseFactory;
@@ -61,17 +62,7 @@ public class LoginCommand extends BasicCommand {
         this.login = login;
         this.auditLog = auditLog;
         this.loginLocker = loginLocker;
-        this.issuer = new Issuer() {
-            @Override
-            public String getIdentifier() {
-                return identifier;
-            }
-
-            @Override
-            public String getIPAddress() {
-                return request.getIPAddress();
-            }
-        };
+        this.issuer = IssuerFactory.getInstance(identifier, request.getIPAddress());
     }
     @Override
     public Response execute() {

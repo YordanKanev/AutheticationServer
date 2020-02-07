@@ -8,23 +8,39 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 class UserRepositoryImpl implements UserRepository {
 
     public static final String USER_NULL_EXCEPTION_MESSAGE = "User is null";
     public static final String USERNAME_NULL_EXCEPTION_MESSAGE = "Username is null";
 
+    public static final String USER_DIRECTORY = "users";
+
     private static final String DATA_FILE_EXTENSION = ".dat";
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(User.class, new UserInterfaceAdapter())
             .registerTypeAdapter(PasswordEncryptor.class, new PasswordEncryptorInterfaceAdapter())
             .create();
+
+    public UserRepositoryImpl() throws IOException {
+        if (!Files.exists(Path.of(USER_DIRECTORY))) {
+            Files.createDirectories(Path.of(USER_DIRECTORY));
+        }
+    }
 
     @Override
     public User delete(User user) {
@@ -69,9 +85,9 @@ class UserRepositoryImpl implements UserRepository {
             return null;
         }
         Path filePath = getFilePath(username);
-        try {
-            Reader reader = new FileReader(filePath.toString());
-            Type userType = new TypeToken<User>() {}.getType();
+        try (Reader reader = new FileReader(filePath.toString())) {
+            Type userType = new TypeToken<User>() {
+            }.getType();
             User user = GSON.fromJson(reader, userType);
             return user;
         } catch (IOException e) {
@@ -99,7 +115,32 @@ class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Iterable<User> findAll() {
-        throw new UnsupportedOperationException();
+        try (Stream<Path> stream = Files.walk(Paths.get(USER_DIRECTORY))) {
+            return stream.filter(file -> !Files.isDirectory(file))
+                    .map(path -> {
+                        try (Reader reader = new FileReader(path.toString())){
+                            return reader;
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            return null;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    })
+                    .filter(reader -> reader != null)
+                    .map(reader -> {
+                        try {
+                            return GSON.fromJson(reader, User.class);
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    })
+                    .filter(user -> user != null)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     private static String formatFileName(String username) {
@@ -108,6 +149,6 @@ class UserRepositoryImpl implements UserRepository {
 
     private static Path getFilePath(String username) {
         String fileName = formatFileName(username);
-        return Path.of(fileName);
+        return Path.of(USER_DIRECTORY, fileName);
     }
 }
