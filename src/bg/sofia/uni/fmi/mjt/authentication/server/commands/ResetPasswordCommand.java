@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
@@ -38,12 +39,12 @@ public class ResetPasswordCommand extends BasicCommand implements Secured {
     public ResetPasswordCommand(Request request, UserRepository userRepository, SessionStore sessionStore) throws ParseException {
         super(request);
         if(userRepository == null || sessionStore == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(CommandFactory.RESET_PASSWORD)) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(CommandFactory.COMMAND_NOT_FOUND_MESSAGE);
         }
         CommandLine commandLine = parser.parse(options, words);
         this.sessionId = commandLine.getOptionValue(optionSessionId.getLongOpt());

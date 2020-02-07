@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.session;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -22,12 +24,12 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public UUID createSession(String username) {
         if (username == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         if (hasActiveSession(username)) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = SessionFactory.getInstance(username);
         usernameToSession.put(username, session);
@@ -66,8 +68,8 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public UUID refreshSession(String username) {
         if (username == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = usernameToSession.get(username);
         return refreshSession(session);
@@ -76,8 +78,8 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public UUID refreshSession(UUID sessionId) {
         if (sessionId == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = sessionIdToSession.get(sessionId);
         return refreshSession(session);
@@ -86,8 +88,8 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public boolean hasActiveSession(String username) {
         if (username == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return usernameToSession.containsKey(username);
     }
@@ -95,8 +97,8 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public boolean hasActiveSession(UUID sessionId) {
         if (sessionId == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return sessionIdToSession.containsKey(sessionId);
     }
@@ -104,8 +106,8 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public Session deleteSession(String username) {
         if (username == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = usernameToSession.remove(username);
         if (session == null) {
@@ -122,8 +124,8 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public Session deleteSession(UUID sessionId) {
         if (sessionId == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = sessionIdToSession.remove(sessionId);
         if (session == null) {
@@ -140,7 +142,7 @@ public class SessionStoreImpl implements SessionStore {
     @Override
     public Session getSession(UUID sessionId) {
         if(sessionId == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return sessionIdToSession.get(sessionId);
     }

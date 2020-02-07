@@ -13,8 +13,12 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.StreamSupport;
 
 public class WebServerImpl implements WebServer {
+
+    public static final String  WEB_SERVER_ALREADY_STARTED_MESSAGE = "WebServer is already started";
+    public static final String WEB_SERVER_NOT_STARTED_MESSAGE = "WebServer is not started.";
 
     private static final int BUFFER_SIZE = 1024;
     private static final long SLEEP_MILLIS = 100L;
@@ -113,7 +117,7 @@ public class WebServerImpl implements WebServer {
                     }
                 }
             }catch (Exception e) {
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
 
         }
@@ -133,8 +137,8 @@ public class WebServerImpl implements WebServer {
     @Override
     public void close() throws Exception {
         if (!started || ssc == null) {
-            //TODO: set message
-            throw new IllegalStateException();
+
+            throw new IllegalStateException(WEB_SERVER_NOT_STARTED_MESSAGE);
         }
         requestHandler.stop();
     }
@@ -143,8 +147,8 @@ public class WebServerImpl implements WebServer {
     @Override
     public void start() throws IOException {
         if (started) {
-            //TODO: set message
-            throw new IllegalStateException();
+
+            throw new IllegalStateException(WEB_SERVER_ALREADY_STARTED_MESSAGE);
         }
         ssc = ServerSocketChannel.open();
         ssc.bind(new InetSocketAddress(serverHost, serverPort));

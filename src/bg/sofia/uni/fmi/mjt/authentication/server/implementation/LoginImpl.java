@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.implementation;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepository;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Login;
@@ -14,8 +15,8 @@ class LoginImpl implements Login {
 
     public LoginImpl(UserRepository userRepository, SessionStore sessionStore) {
         if (userRepository == null || sessionStore == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userRepository = userRepository;
         this.sessionStore = sessionStore;
@@ -24,7 +25,7 @@ class LoginImpl implements Login {
     @Override
     public UUID login(UUID sessionId) {
         if(sessionId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return sessionStore.refreshSession(sessionId);
     }
@@ -32,8 +33,8 @@ class LoginImpl implements Login {
     @Override
     public UUID login(String username, String password) {
         if(username == null || password == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
 
         if(userRepository.exists(username)){

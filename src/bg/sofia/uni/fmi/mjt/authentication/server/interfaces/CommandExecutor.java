@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.interfaces;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.AdminOperation;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.PasswordChange;
@@ -24,7 +25,7 @@ public interface CommandExecutor extends Registrator,
 
     static CommandExecutor defaultExecutor(AuthenticationEngine authenticationEngine) {
         if(authenticationEngine == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Login login = LoginFactory.getInstance(authenticationEngine.getUserRepository(),
                 authenticationEngine.getSessionStore());

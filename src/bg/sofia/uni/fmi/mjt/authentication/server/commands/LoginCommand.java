@@ -4,6 +4,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditLog;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.EntryFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.Issuer;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.IssuerFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.ResponseFactory;
@@ -40,13 +41,13 @@ public class LoginCommand extends BasicCommand {
                         LoginLocker loginLocker) throws ParseException {
         super(request);
         if(request == null || login == null || auditLog == null || loginLocker == null){
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(CommandFactory.LOGIN)) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         CommandLine commandLine = parser.parse(options, words);
         username = commandLine.getOptionValue(optionUsername.getLongOpt());
@@ -56,7 +57,7 @@ public class LoginCommand extends BasicCommand {
         tryLoginWithCredentials = username != null && password != null;
         tryLoginWithSessionId = sessionId != null;
         if(!tryLoginWithCredentials && !tryLoginWithSessionId){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String identifier = tryLoginWithCredentials ? username : sessionId;
         this.login = login;

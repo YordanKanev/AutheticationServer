@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
@@ -17,7 +18,7 @@ public class DeleteUserCommand extends AdminCommand {
     public DeleteUserCommand(Request request, UserDeleter userDeleter) throws ParseException {
         super(request, CommandFactory.DELETE_USER);
         if(userDeleter == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userDeleter = userDeleter;
     }

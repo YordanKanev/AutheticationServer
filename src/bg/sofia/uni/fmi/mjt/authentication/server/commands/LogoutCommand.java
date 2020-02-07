@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.ResponseFactory;
@@ -27,12 +28,12 @@ public class LogoutCommand extends BasicCommand implements Secured {
     public LogoutCommand(Request request, SessionStore sessionStore) throws ParseException {
         super(request);
         if(sessionStore == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(CommandFactory.LOGOUT)) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(CommandFactory.COMMAND_NOT_FOUND_MESSAGE);
         }
         CommandLine commandLine = parser.parse(options, words);
         this.sessionId = commandLine.getOptionValue(optionSessionId.getLongOpt());

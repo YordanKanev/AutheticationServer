@@ -2,6 +2,7 @@ package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
 import java.util.UUID;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.UserRegistration;
@@ -39,13 +40,13 @@ public class RegisterCommand extends BasicCommand {
     public RegisterCommand(Request request, Registrator registrator, Login login) throws ParseException {
         super(request);
         if (request == null || registrator == null || login == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(CommandFactory.REGISTER)) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         CommandLine commandLine = parser.parse(options, words);
         username = commandLine.getOptionValue(optionUsername.getLongOpt());

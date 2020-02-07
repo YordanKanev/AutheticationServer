@@ -8,6 +8,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditLog;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.change.AuditLogFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.commands.Command;
 import bg.sofia.uni.fmi.mjt.authentication.server.commands.CommandFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.Response;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.response.ResponseFactory;
@@ -59,8 +60,8 @@ public class AuthenticationServer implements AuthenticationController {
 
     public AuthenticationServer(AuthenticationServerConfiguration configuration, AuditConfiguration auditConfiguration) throws IOException {
         if (configuration == null || auditConfiguration == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.configuration = configuration;
         this.auditConfiguration = auditConfiguration;
@@ -83,8 +84,8 @@ public class AuthenticationServer implements AuthenticationController {
 
     public void stop() throws Exception {
         if (webServer == null) {
-            //TODO: set message
-            throw new IllegalStateException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.webServer.close();
     }

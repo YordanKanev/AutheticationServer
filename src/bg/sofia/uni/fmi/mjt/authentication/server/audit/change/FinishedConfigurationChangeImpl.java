@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.audit.change;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.Issuer;
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 
 import java.util.UUID;
 
@@ -20,8 +21,8 @@ public class FinishedConfigurationChangeImpl extends ConfigurationChangeImpl imp
 
     private void setChangeResult(ChangeResult changeResult){
         if(changeResult == null){
-            //TODO: set message;
-            throw new IllegalArgumentException();
+            ;
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.changeResult = changeResult;
     }

@@ -1,12 +1,13 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import org.apache.commons.cli.Option;
 
 public interface CommandOptions {
 
     static Option.Builder getOptionBuilderFor(String optionName){
         if(optionName == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return Option.builder()
                 .hasArg(true)

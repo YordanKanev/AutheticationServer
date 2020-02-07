@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.implementation;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.Logout;
 import bg.sofia.uni.fmi.mjt.authentication.server.session.Session;
 import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
@@ -12,8 +13,8 @@ public class LogoutImpl implements Logout {
 
     public LogoutImpl(SessionStore sessionStore) {
         if(sessionStore == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.sessionStore = sessionStore;
     }
@@ -21,8 +22,8 @@ public class LogoutImpl implements Logout {
     @Override
     public Session logout(UUID sessionId) {
         if(sessionId == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return sessionStore.deleteSession(sessionId);
     }

@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.webserver;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.AuthenticationController;
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 
 import java.io.IOException;
 
@@ -14,8 +15,8 @@ public interface WebServerBuilder {
 	int getServerPort();
 	default WebServer build(AuthenticationController authenticationController) throws IOException {
 		if(authenticationController == null) {
-			//TODO: set message;
-			throw new IllegalArgumentException();
+			;
+			throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
 		}
 		return new WebServerImpl(getServerHost(),getServerPort(), authenticationController);
 	}
@@ -34,8 +35,8 @@ public interface WebServerBuilder {
 			@Override
 			public WebServerBuilder setServerHost(String serverHost) {
 				if(serverHost == null) {
-					//TODO: set message
-					throw new IllegalArgumentException();
+
+					throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
 				}
 				this.serverHost = serverHost;
 				return this;

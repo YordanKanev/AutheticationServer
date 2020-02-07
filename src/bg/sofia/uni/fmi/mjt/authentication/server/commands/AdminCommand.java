@@ -2,6 +2,7 @@ package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.Issuer;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.issuer.IssuerFactory;
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.AdminOperation;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import org.apache.commons.cli.CommandLine;
@@ -27,8 +28,8 @@ public abstract class AdminCommand extends BasicCommand implements Secured {
         super(request);
         String[] words = request.getRequestBody().split("\\s+");
         if (!words[0].equals(command)) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         CommandLine commandLine = parser.parse(options, words);
         this.sessionId = commandLine.getOptionValue(optionSessionId.getLongOpt());

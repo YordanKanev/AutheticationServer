@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.implementation;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.UserFactory;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.UserRegistration;
@@ -13,16 +14,16 @@ class RegistratorImpl implements Registrator {
 
     public RegistratorImpl(UserRepository userRepository){
         if(userRepository == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userRepository = userRepository;
     }
     @Override
     public User register(UserRegistration userRegistration) {
         if(userRegistration == null){
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         if(userRepository.exists(userRegistration.getUsername())){
             throw new IllegalArgumentException(USER_ALREADY_EXIST_MESSAGE);

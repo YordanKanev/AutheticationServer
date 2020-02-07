@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -11,8 +12,8 @@ public abstract class BasicCommand implements Command{
 
     protected BasicCommand(Request request){
         if(request == null){
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.parser = new DefaultParser();
         this.request = request;

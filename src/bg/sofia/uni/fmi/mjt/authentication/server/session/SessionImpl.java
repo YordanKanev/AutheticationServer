@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.session;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,8 +12,8 @@ public class SessionImpl implements Session {
 
     public SessionImpl(String username){
         if(username == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.username = username;
         this.sessionId = UUID.randomUUID();

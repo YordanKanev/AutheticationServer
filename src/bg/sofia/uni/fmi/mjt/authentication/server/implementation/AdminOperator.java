@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.implementation;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.AdminOperation;
 import bg.sofia.uni.fmi.mjt.authentication.server.repository.UserRepository;
@@ -22,7 +23,7 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
 
     private AdminOperator(UserRepository userRepository, SessionStore sessionStore){
         if(userRepository == null || sessionStore == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userRepository = userRepository;
         this.sessionStore = sessionStore;
@@ -111,7 +112,7 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
     @Override
     public User removeAdmin(AdminOperation adminOperation) {
         if(adminOperation == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = sessionStore.getSession(adminOperation.getSessionId());
         if(!checkSessionPermission(session)){

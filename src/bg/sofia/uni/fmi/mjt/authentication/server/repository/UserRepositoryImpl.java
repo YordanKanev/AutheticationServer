@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.repository;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.user.User;
 import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptor;
 import bg.sofia.uni.fmi.mjt.authentication.server.utils.PasswordEncryptorInterfaceAdapter;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 class UserRepositoryImpl implements UserRepository {
-
+    public static final String COUNT_NOT_SUPPORT_MESSAGE = "Method count of UserRepository is not supported.";
     public static final String USER_NULL_EXCEPTION_MESSAGE = "User is null";
     public static final String USERNAME_NULL_EXCEPTION_MESSAGE = "Username is null";
 
@@ -72,14 +73,14 @@ class UserRepositoryImpl implements UserRepository {
 
     @Override
     public long count() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(COUNT_NOT_SUPPORT_MESSAGE);
     }
 
     @Override
     public User findOne(String username) {
         if (username == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         if (!exists(username)) {
             return null;

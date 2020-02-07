@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.client;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
+
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -22,7 +24,7 @@ public class WebClient implements Runnable{
                      String serverHost,
                      int serverPort){
         if(inputStream == null || outputStream == null || serverHost == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.scanner = new Scanner(inputStream);
         this.printer = new PrintStream(outputStream);

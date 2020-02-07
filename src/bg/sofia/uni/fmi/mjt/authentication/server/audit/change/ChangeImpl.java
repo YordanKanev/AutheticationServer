@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.audit.change;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
+
 public class ChangeImpl implements Change {
 
     private String username;
@@ -21,8 +23,8 @@ public class ChangeImpl implements Change {
 
     private void setUsername(String username){
         if(username == null){
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.username = username;
     }

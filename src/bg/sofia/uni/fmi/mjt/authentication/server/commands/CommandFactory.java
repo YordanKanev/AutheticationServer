@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.authentication.server.commands;
 
+import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 import bg.sofia.uni.fmi.mjt.authentication.server.model.web.request.Request;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.AuthenticationEngine;
 import bg.sofia.uni.fmi.mjt.authentication.server.interfaces.CommandExecutor;
@@ -34,19 +35,20 @@ public interface CommandFactory {
     }
 
     String COMMAND_NOT_FOUND_MESSAGE = "Command not found";
+    String INVALID_ARGUMENTS = "Invalid arguments";
 
     static Command getInstance(Request request,
                                CommandExecutor commandExecutor,
                                AuthenticationEngine authenticationEngine,
                                LoginLocker loginLocker) throws ParseException {
         if (request == null || commandExecutor == null || authenticationEngine == null) {
-            //TODO: set message
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Command result = null;
         String[] words = request.getRequestBody().split("\\s+");
         if (words.length < 2) {
-            //TODO: throw exception
+            throw new IllegalArgumentException(INVALID_ARGUMENTS);
         }
 
         switch (words[0]) {
