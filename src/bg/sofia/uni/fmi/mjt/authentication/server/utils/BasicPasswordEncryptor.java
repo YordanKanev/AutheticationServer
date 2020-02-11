@@ -12,6 +12,7 @@ public class BasicPasswordEncryptor implements PasswordEncryptor {
     private static BasicPasswordEncryptor basicPasswordEncryptor = null;
     private MessageDigest messageDigest;
     private byte[] salt = "secret".getBytes();
+
     private BasicPasswordEncryptor() throws NoSuchAlgorithmException {
         messageDigest = MessageDigest.getInstance("SHA-512");
     }

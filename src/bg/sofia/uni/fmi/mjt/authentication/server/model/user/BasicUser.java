@@ -15,12 +15,13 @@ class BasicUser implements User {
     private boolean admin;
     private transient PasswordEncryptor passwordEncryptor;
 
-    public BasicUser(){
+    public BasicUser() {
         this.passwordEncryptor = PasswordEncryptorFactory.getInstance();
     }
+
     public BasicUser(String username, String password,
                      String firstName, String lastName, String email,
-                     boolean admin, PasswordEncryptor passwordEncryptor){
+                     boolean admin, PasswordEncryptor passwordEncryptor) {
         setPasswordEncryptor(passwordEncryptor);
         setUsername(username);
         setPassword(password);
@@ -53,7 +54,7 @@ class BasicUser implements User {
 
     @Override
     public void setUsername(String username) {
-        if(username == null){
+        if (username == null) {
             throw new IllegalArgumentException(USERNAME_NULL_EXCEPTION_MESSAGE);
         }
         this.username = username;
@@ -61,7 +62,7 @@ class BasicUser implements User {
 
     @Override
     public void setFirstName(String firstName) {
-        if(firstName == null){
+        if (firstName == null) {
             throw new IllegalArgumentException(FIRSTNAME_NULL_EXCEPTION_MESSAGE);
         }
         this.firstName = firstName;
@@ -69,7 +70,7 @@ class BasicUser implements User {
 
     @Override
     public void setLastName(String lastName) {
-        if(lastName == null){
+        if (lastName == null) {
             throw new IllegalArgumentException(LASTNAME_NULL_EXCEPTION_MESSAGE);
         }
         this.lastName = lastName;
@@ -77,7 +78,7 @@ class BasicUser implements User {
 
     @Override
     public void setEmail(String email) {
-        if(email == null){
+        if (email == null) {
             throw new IllegalArgumentException(EMAIL_NULL_EXCEPTION_MESSAGE);
         }
         this.email = email;
@@ -85,7 +86,7 @@ class BasicUser implements User {
 
     @Override
     public void setPassword(String password) {
-        if(password == null){
+        if (password == null) {
             throw new IllegalArgumentException(PASSWORD_NULL_EXCEPTION_MESSAGE);
         }
         this.password = passwordEncryptor.hashPassword(password);
@@ -103,15 +104,15 @@ class BasicUser implements User {
 
     @Override
     public boolean verifyPassword(String password) {
-        if(password == null){
+        if (password == null) {
             throw new IllegalArgumentException(PASSWORD_NULL_EXCEPTION_MESSAGE);
         }
         String hashed = passwordEncryptor.hashPassword(password);
         return hashed.equals(this.password);
     }
 
-    private void setPasswordEncryptor(PasswordEncryptor passwordEncryptor){
-        if(passwordEncryptor == null){
+    private void setPasswordEncryptor(PasswordEncryptor passwordEncryptor) {
+        if (passwordEncryptor == null) {
             throw new IllegalArgumentException(PASSWORDENCRYPTOR_NULL_EXCEPTION_MESSAGE);
         }
         this.passwordEncryptor = passwordEncryptor;

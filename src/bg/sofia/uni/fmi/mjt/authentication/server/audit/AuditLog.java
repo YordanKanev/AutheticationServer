@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface AuditLog {
 
-	void log(Entry entry) throws IOException;
+    void log(Entry entry) throws IOException;
 }

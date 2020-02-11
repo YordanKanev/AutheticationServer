@@ -19,8 +19,8 @@ public class StartedConfigurationChangeImpl extends ConfigurationChangeImpl impl
         return change;
     }
 
-    private void setChange(Change change){
-        if(change == null){
+    private void setChange(Change change) {
+        if (change == null) {
             ;
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }

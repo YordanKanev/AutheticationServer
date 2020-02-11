@@ -10,8 +10,8 @@ public class SessionImpl implements Session {
     private UUID sessionId;
     private String username;
 
-    public SessionImpl(String username){
-        if(username == null) {
+    public SessionImpl(String username) {
+        if (username == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }

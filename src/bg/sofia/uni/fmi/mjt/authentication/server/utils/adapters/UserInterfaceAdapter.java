@@ -19,12 +19,14 @@ public class UserInterfaceAdapter implements JsonSerializer<User>, JsonDeseriali
         Class klass = getObjectClass(className);
         return jsonDeserializationContext.deserialize(jsonObject.get(DATA), klass);
     }
+
     public JsonElement serialize(User jsonElement, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(CLASSNAME, jsonElement.getClass().getName());
         jsonObject.add(DATA, jsonSerializationContext.serialize(jsonElement));
         return jsonObject;
     }
+
     /****** Helper method to get the className of the object to be deserialized *****/
     public Class getObjectClass(String className) {
         try {

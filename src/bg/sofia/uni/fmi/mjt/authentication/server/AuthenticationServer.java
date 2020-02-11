@@ -26,8 +26,6 @@ import bg.sofia.uni.fmi.mjt.authentication.server.webserver.WebServerBuilder;
 public class AuthenticationServer implements AuthenticationController {
 
 
-
-
     private AuditLog auditLog;
     private SessionStore sessionStore;
     private WebServer webServer;
@@ -95,14 +93,14 @@ public class AuthenticationServer implements AuthenticationController {
         if (request == null) {
             return;
         }
-        try{
+        try {
             Command command = CommandFactory.getInstance(request,
                     commandExecutor,
                     authenticationEngine,
                     loginLocker);
             Response response = command.execute();
             consumer.accept(response);
-        }catch (Exception e){
+        } catch (Exception e) {
             consumer.accept(ResponseFactory.error(e.getMessage()));
         }
     }

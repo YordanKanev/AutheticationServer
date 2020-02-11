@@ -13,11 +13,11 @@ public abstract class BasicEntry implements Entry {
     private EntryType entryType;
     private Issuer issuer;
 
-    protected BasicEntry(EntryType entryType, Issuer issuer){
-        if(entryType == null){
+    protected BasicEntry(EntryType entryType, Issuer issuer) {
+        if (entryType == null) {
             throw new IllegalArgumentException(ENTRY_TYPE_NULL_EXCEPTION_MESSAGE);
         }
-        if(issuer == null){
+        if (issuer == null) {
             throw new IllegalArgumentException(ISSUER_NULL_EXCEPTION_MESSAGE);
         }
         this.timestamp = LocalDateTime.now();

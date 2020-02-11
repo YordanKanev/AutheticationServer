@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.temporal.TemporalField;
 
-public class AuditLogImpl implements AuditLog{
+public class AuditLogImpl implements AuditLog {
 
     public static final String PATH_NULL_EXCEPTION_MESSAGE = "AuditDirectory is null";
     public static final String INVALID_PATH_EXCEPTION_MESSAGE = "Invalid path - should be a directory";
@@ -19,13 +19,13 @@ public class AuditLogImpl implements AuditLog{
 
 
     private Path auditDirectory;
-    
-    public AuditLogImpl(AuditConfiguration auditConfiguration){
-        if(auditConfiguration == null){
+
+    public AuditLogImpl(AuditConfiguration auditConfiguration) {
+        if (auditConfiguration == null) {
             throw new IllegalArgumentException(PATH_NULL_EXCEPTION_MESSAGE);
         }
         Path auditDirectory = auditConfiguration.getAuditDirectoryPath();
-        if(!Files.isDirectory(auditDirectory)){
+        if (!Files.isDirectory(auditDirectory)) {
             throw new IllegalArgumentException(INVALID_PATH_EXCEPTION_MESSAGE);
         }
         this.auditDirectory = auditDirectory;
@@ -33,16 +33,16 @@ public class AuditLogImpl implements AuditLog{
 
     @Override
     public void log(Entry entry) throws IOException {
-        if(entry == null){
+        if (entry == null) {
             throw new IllegalArgumentException(ENTRY_NULL_EXCEPTION_MESSAGE);
         }
         String json = GSON.toJson(entry);
         String fileName = formatFileName(entry);
-        Path filePath = Path.of(auditDirectory.toString(),fileName);
-        Files.write(filePath,json.getBytes());
+        Path filePath = Path.of(auditDirectory.toString(), fileName);
+        Files.write(filePath, json.getBytes());
     }
 
-    private static String formatFileName(Entry entry){
+    private static String formatFileName(Entry entry) {
         return FILE_NAME + entry.getTimestamp()
                 .atZone(ZoneId.systemDefault())
                 .toInstant()

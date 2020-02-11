@@ -8,7 +8,7 @@ public interface AuditConfiguration {
 
     Path getAuditDirectoryPath();
 
-    static AuditConfiguration defaultConfiguration(){
+    static AuditConfiguration defaultConfiguration() {
         return new AuditConfiguration() {
             @Override
             public Path getAuditDirectoryPath() {

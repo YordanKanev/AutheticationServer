@@ -4,8 +4,12 @@ import java.util.UUID;
 
 public interface UserUpdate {
     UUID getSessionId();
+
     String getUsername();
+
     String getFirstName();
+
     String getLastName();
+
     String getEmail();
 }

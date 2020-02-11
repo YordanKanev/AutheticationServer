@@ -27,7 +27,7 @@ public class LogoutCommand extends BasicCommand implements Secured {
 
     public LogoutCommand(Request request, SessionStore sessionStore) throws ParseException {
         super(request);
-        if(sessionStore == null){
+        if (sessionStore == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
@@ -42,14 +42,14 @@ public class LogoutCommand extends BasicCommand implements Secured {
 
     @Override
     public Response execute() {
-        try{
+        try {
             Session session = sessionStore.deleteSession(UUID.fromString(sessionId));
-            if(session != null){
+            if (session != null) {
                 return ResponseFactory.success(LOGOUT_SUCCESS_MESSAGE);
-            }else{
+            } else {
                 return ResponseFactory.error(LOGOUT_FAIL_MESSAGE);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseFactory.error(e.getMessage());
         }

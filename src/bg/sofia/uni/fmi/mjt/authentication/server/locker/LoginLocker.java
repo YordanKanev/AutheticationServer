@@ -4,5 +4,6 @@ public interface LoginLocker {
     String LOCKED_MESSAGE = "You are locked. Try again later.";
 
     boolean isLocked(String ipAddress);
+
     void incrementAttempt(String ipAddress);
 }

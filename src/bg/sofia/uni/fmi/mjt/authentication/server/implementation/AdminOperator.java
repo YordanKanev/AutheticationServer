@@ -21,18 +21,19 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
     private UserRepository userRepository;
     private SessionStore sessionStore;
 
-    private AdminOperator(UserRepository userRepository, SessionStore sessionStore){
-        if(userRepository == null || sessionStore == null){
+    private AdminOperator(UserRepository userRepository, SessionStore sessionStore) {
+        if (userRepository == null || sessionStore == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userRepository = userRepository;
         this.sessionStore = sessionStore;
     }
-    private boolean hasPermission(AdminOperation adminOperation){
-        if(adminOperation == null){
+
+    private boolean hasPermission(AdminOperation adminOperation) {
+        if (adminOperation == null) {
             return false;
         }
-        if(!sessionStore.hasActiveSession(adminOperation.getSessionId())){
+        if (!sessionStore.hasActiveSession(adminOperation.getSessionId())) {
             return false;
         }
         Session session = sessionStore.getSession(adminOperation.getSessionId());
@@ -40,88 +41,91 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
     }
 
     private boolean checkSessionPermission(Session session) {
-        if(session == null){
+        if (session == null) {
             return false;
         }
         User user = userRepository.findOne(session.getUsername());
-        if(user == null){
+        if (user == null) {
             return false;
         }
-        if(!user.isAdmin()){
-            return  false;
+        if (!user.isAdmin()) {
+            return false;
         }
         return true;
     }
 
-    private User changeAdminRights(AdminOperation adminOperation, boolean isAdmin){
-        if(!hasPermission(adminOperation)){
+    private User changeAdminRights(AdminOperation adminOperation, boolean isAdmin) {
+        if (!hasPermission(adminOperation)) {
             return null;
         }
         User user = userRepository.findOne(adminOperation.getUsername());
-        if(user == null){
+        if (user == null) {
             return null;
         }
         user.setAdmin(isAdmin);
         return userRepository.save(user);
     }
+
     @Override
     public User createAdmin(AdminOperation adminOperation) {
         return changeAdminRights(adminOperation, true);
     }
 
-    private User removeSelfRights(AdminOperation adminOperation){
+    private User removeSelfRights(AdminOperation adminOperation) {
         Iterable<User> users = userRepository.findAll();
-        if(users == null){
+        if (users == null) {
             return null;
         }
         Iterator<User> iterator = users.iterator();
         int count = 0;
         boolean match = false;
         User userToUpdate = null;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             User user = iterator.next();
-            if(user.getUsername().equals(adminOperation.getUsername())){
+            if (user.getUsername().equals(adminOperation.getUsername())) {
                 match = true;
                 userToUpdate = user;
             }
-            if(user.isAdmin()){
+            if (user.isAdmin()) {
                 count++;
             }
-            if(count > 1 && match){
+            if (count > 1 && match) {
                 break;
             }
             iterator.remove();
         }
-        if(!match || count < 2){
+        if (!match || count < 2) {
             return null;
         }
-        if(userToUpdate == null){
+        if (userToUpdate == null) {
             return null;
         }
         userToUpdate.setAdmin(false);
         return userRepository.save(userToUpdate);
     }
-    private User removeOtherRights(AdminOperation adminOperation){
+
+    private User removeOtherRights(AdminOperation adminOperation) {
         User user = userRepository.findOne(adminOperation.getUsername());
-        if(user == null){
+        if (user == null) {
             return null;
         }
         user.setAdmin(false);
         return userRepository.save(user);
     }
+
     @Override
     public User removeAdmin(AdminOperation adminOperation) {
-        if(adminOperation == null){
+        if (adminOperation == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Session session = sessionStore.getSession(adminOperation.getSessionId());
-        if(!checkSessionPermission(session)){
+        if (!checkSessionPermission(session)) {
             return null;
         }
-        if(session.getUsername().equals(adminOperation.getUsername())){
+        if (session.getUsername().equals(adminOperation.getUsername())) {
             //self remove rights
             return removeSelfRights(adminOperation);
-        }else{
+        } else {
             //remove rights of other
             return removeOtherRights(adminOperation);
         }
@@ -129,30 +133,30 @@ public class AdminOperator implements AdminRemover, AdminCreator, UserDeleter {
 
     @Override
     public User deleteUser(AdminOperation adminOperation) {
-        if(!hasPermission(adminOperation)){
+        if (!hasPermission(adminOperation)) {
             return null;
         }
         User user = userRepository.findOne(adminOperation.getUsername());
-        if(user == null){
+        if (user == null) {
             return null;
         }
         User deleted = userRepository.delete(user);
-        if(deleted == null){
+        if (deleted == null) {
             return null;
         }
         sessionStore.deleteSession(adminOperation.getUsername());
         return deleted;
     }
 
-    public static AdminCreator getAdminCreator(UserRepository userRepository,SessionStore sessionStore){
-        return new AdminOperator(userRepository,sessionStore);
+    public static AdminCreator getAdminCreator(UserRepository userRepository, SessionStore sessionStore) {
+        return new AdminOperator(userRepository, sessionStore);
     }
 
     public static AdminRemover getAdminRemover(UserRepository userRepository, SessionStore sessionStore) {
-        return new AdminOperator(userRepository,sessionStore);
+        return new AdminOperator(userRepository, sessionStore);
     }
 
     public static UserDeleter getUserDeleter(UserRepository userRepository, SessionStore sessionStore) {
-        return new AdminOperator(userRepository,sessionStore);
+        return new AdminOperator(userRepository, sessionStore);
     }
 }

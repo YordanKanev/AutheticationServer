@@ -4,5 +4,6 @@ import java.util.UUID;
 
 public interface AdminOperation {
     UUID getSessionId();
+
     String getUsername();
 }

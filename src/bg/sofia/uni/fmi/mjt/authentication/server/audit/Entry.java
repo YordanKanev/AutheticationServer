@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 public interface Entry extends Serializable {
     LocalDateTime getTimestamp();
+
     EntryType getEntryType();
+
     Issuer getIssuer();
 }

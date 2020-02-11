@@ -5,5 +5,6 @@ import java.util.UUID;
 public interface Session {
 
     UUID getSessionId();
+
     String getUsername();
 }

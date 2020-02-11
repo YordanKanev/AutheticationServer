@@ -36,9 +36,10 @@ public class UpdateUserCommand extends BasicCommand implements Secured {
 
     private UserRepository userRepository;
     private SessionStore sessionStore;
+
     public UpdateUserCommand(Request request, UserRepository userRepository, SessionStore sessionStore) throws ParseException {
         super(request);
-        if(userRepository == null || sessionStore == null) {
+        if (userRepository == null || sessionStore == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
@@ -59,36 +60,36 @@ public class UpdateUserCommand extends BasicCommand implements Secured {
 
     @Override
     public Response execute() {
-        try{
-            if(!sessionStore.hasActiveSession(UUID.fromString(sessionId))){
+        try {
+            if (!sessionStore.hasActiveSession(UUID.fromString(sessionId))) {
                 return ResponseFactory.error(Secured.INVALID_SESSION_ID_MESSAGE);
             }
             Session session = sessionStore.getSession(getSessionId());
-            if(session == null){
+            if (session == null) {
                 return ResponseFactory.error(Secured.INVALID_SESSION_ID_MESSAGE);
             }
             User user = userRepository.findOne(session.getUsername());
-            if(user == null) {
+            if (user == null) {
                 return ResponseFactory.error(UserRepository.USER_NOT_FOUND_MESSAGE);
             }
-            if(username != null){
+            if (username != null) {
                 user.setUsername(username);
             }
-            if(firstName != null) {
+            if (firstName != null) {
                 user.setFirstName(firstName);
             }
-            if(lastName != null){
+            if (lastName != null) {
                 user.setLastName(lastName);
             }
-            if(email != null) {
+            if (email != null) {
                 user.setEmail(email);
             }
             User updateUser = userRepository.save(user);
-            if(updateUser == null) {
+            if (updateUser == null) {
                 return ResponseFactory.error(USER_NOT_UPDATED_MESSAGE);
             }
             return ResponseFactory.success(USER_UPDATED_MESSAGE);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseFactory.error(e.getMessage());
         }

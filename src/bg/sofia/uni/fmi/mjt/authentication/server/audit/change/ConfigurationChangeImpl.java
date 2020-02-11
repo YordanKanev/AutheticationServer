@@ -7,7 +7,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 
 import java.util.UUID;
 
-public class ConfigurationChangeImpl extends BasicEntry implements ConfigurationChange{
+public class ConfigurationChangeImpl extends BasicEntry implements ConfigurationChange {
 
     private UUID operationId;
 
@@ -21,8 +21,8 @@ public class ConfigurationChangeImpl extends BasicEntry implements Configuration
         return operationId;
     }
 
-    private void setOperationId(UUID operationId){
-        if(operationId == null){
+    private void setOperationId(UUID operationId) {
+        if (operationId == null) {
             ;
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }

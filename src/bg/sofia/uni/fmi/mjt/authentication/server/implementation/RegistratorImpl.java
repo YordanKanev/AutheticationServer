@@ -12,20 +12,21 @@ class RegistratorImpl implements Registrator {
 
     private UserRepository userRepository;
 
-    public RegistratorImpl(UserRepository userRepository){
-        if(userRepository == null) {
+    public RegistratorImpl(UserRepository userRepository) {
+        if (userRepository == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userRepository = userRepository;
     }
+
     @Override
     public User register(UserRegistration userRegistration) {
-        if(userRegistration == null){
+        if (userRegistration == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
-        if(userRepository.exists(userRegistration.getUsername())){
+        if (userRepository.exists(userRegistration.getUsername())) {
             throw new IllegalArgumentException(USER_ALREADY_EXIST_MESSAGE);
         }
         User user = UserFactory.getInstance(userRegistration.getUsername(),

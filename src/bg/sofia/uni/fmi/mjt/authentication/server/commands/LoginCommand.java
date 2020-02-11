@@ -40,7 +40,7 @@ public class LoginCommand extends BasicCommand {
                         AuditLog auditLog,
                         LoginLocker loginLocker) throws ParseException {
         super(request);
-        if(request == null || login == null || auditLog == null || loginLocker == null){
+        if (request == null || login == null || auditLog == null || loginLocker == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
@@ -56,7 +56,7 @@ public class LoginCommand extends BasicCommand {
 
         tryLoginWithCredentials = username != null && password != null;
         tryLoginWithSessionId = sessionId != null;
-        if(!tryLoginWithCredentials && !tryLoginWithSessionId){
+        if (!tryLoginWithCredentials && !tryLoginWithSessionId) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String identifier = tryLoginWithCredentials ? username : sessionId;
@@ -65,25 +65,26 @@ public class LoginCommand extends BasicCommand {
         this.loginLocker = loginLocker;
         this.issuer = IssuerFactory.getInstance(identifier, request.getIPAddress());
     }
+
     @Override
     public Response execute() {
-        try{
-            if(loginLocker.isLocked(issuer.getIPAddress())){
+        try {
+            if (loginLocker.isLocked(issuer.getIPAddress())) {
                 return ResponseFactory.error(LoginLocker.LOCKED_MESSAGE);
             }
             UUID sessionId;
-            if(tryLoginWithCredentials){
-                sessionId = login.login(username,password);
-            }else{
+            if (tryLoginWithCredentials) {
+                sessionId = login.login(username, password);
+            } else {
                 sessionId = login.login(UUID.fromString(this.sessionId));
             }
-            if(sessionId == null){
+            if (sessionId == null) {
                 auditLog.log(EntryFactory.failedLogin(issuer));
                 loginLocker.incrementAttempt(issuer.getIPAddress());
                 return ResponseFactory.error(LOGIN_FAILED_MESSAGE);
             }
             return ResponseFactory.success(sessionId.toString());
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseFactory.error(e.getMessage());
         }
     }

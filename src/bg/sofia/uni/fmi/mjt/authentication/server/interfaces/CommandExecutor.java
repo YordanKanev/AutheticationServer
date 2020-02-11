@@ -24,7 +24,7 @@ public interface CommandExecutor extends Registrator,
         UserDeleter {
 
     static CommandExecutor defaultExecutor(AuthenticationEngine authenticationEngine) {
-        if(authenticationEngine == null){
+        if (authenticationEngine == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         Login login = LoginFactory.getInstance(authenticationEngine.getUserRepository(),

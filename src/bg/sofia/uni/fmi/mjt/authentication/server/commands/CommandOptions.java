@@ -5,8 +5,8 @@ import org.apache.commons.cli.Option;
 
 public interface CommandOptions {
 
-    static Option.Builder getOptionBuilderFor(String optionName){
-        if(optionName == null){
+    static Option.Builder getOptionBuilderFor(String optionName) {
+        if (optionName == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return Option.builder()

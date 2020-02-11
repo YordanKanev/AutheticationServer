@@ -13,7 +13,7 @@ public class ChangeResultImpl implements ChangeResult {
         return successfull;
     }
 
-    private void setSuccessfull(boolean successfull){
+    private void setSuccessfull(boolean successfull) {
         this.successfull = successfull;
     }
 }

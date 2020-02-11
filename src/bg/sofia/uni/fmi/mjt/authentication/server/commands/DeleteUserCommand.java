@@ -17,23 +17,24 @@ public class DeleteUserCommand extends AdminCommand {
 
     public DeleteUserCommand(Request request, UserDeleter userDeleter) throws ParseException {
         super(request, CommandFactory.DELETE_USER);
-        if(userDeleter == null){
+        if (userDeleter == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.userDeleter = userDeleter;
     }
+
     @Override
     public Response execute() {
-        try{
+        try {
             User user = userDeleter.deleteUser(this.adminOperation);
             Response response = null;
-            if(user == null){
+            if (user == null) {
                 response = ResponseFactory.error(USER_NOT_DELETED_MESSAGE);
-            }else{
+            } else {
                 response = ResponseFactory.success(USER_DELETED_MESSAGE);
             }
             return response;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseFactory.error(e.getMessage());
         }

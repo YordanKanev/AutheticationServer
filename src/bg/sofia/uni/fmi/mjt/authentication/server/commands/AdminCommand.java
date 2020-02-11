@@ -24,6 +24,7 @@ public abstract class AdminCommand extends BasicCommand implements Secured {
 
     private String sessionId;
     private String username;
+
     protected AdminCommand(Request request, String command) throws ParseException {
         super(request);
         String[] words = request.getRequestBody().split("\\s+");
@@ -45,7 +46,7 @@ public abstract class AdminCommand extends BasicCommand implements Secured {
                 return username;
             }
         };
-        this.issuer = IssuerFactory.getInstance(getSessionId().toString(),request.getIPAddress());
+        this.issuer = IssuerFactory.getInstance(getSessionId().toString(), request.getIPAddress());
     }
 
     @Override

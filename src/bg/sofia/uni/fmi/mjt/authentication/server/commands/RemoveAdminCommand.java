@@ -23,19 +23,21 @@ public class RemoveAdminCommand extends AdminCommand {
 
     public RemoveAdminCommand(Request request, AdminRemover adminRemover, AuditLog auditLog) throws ParseException {
         super(request, CommandFactory.REMOVED_ADMIN_USER);
-        if(adminRemover == null || auditLog == null){
+        if (adminRemover == null || auditLog == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         this.adminRemover = adminRemover;
         this.auditLog = auditLog;
     }
+
     private StartedConfigurationChange logStartAction() throws IOException {
-        Change change = ChangeFactory.getInstance(this.adminOperation.getUsername(),true);
-        StartedConfigurationChange configurationChange = ConfigurationChangeFactory.startConfigurationChange(change,issuer);
+        Change change = ChangeFactory.getInstance(this.adminOperation.getUsername(), true);
+        StartedConfigurationChange configurationChange = ConfigurationChangeFactory.startConfigurationChange(change, issuer);
         auditLog.log(configurationChange);
         return configurationChange;
     }
-    private void logFinishAction(StartedConfigurationChange startedConfigurationChange,boolean successful) throws IOException {
+
+    private void logFinishAction(StartedConfigurationChange startedConfigurationChange, boolean successful) throws IOException {
         ChangeResult changeResult = ChangeResultFactory.getInstance(successful);
         FinishedConfigurationChange configurationChange = ConfigurationChangeFactory.finishConfigurationChange(startedConfigurationChange,
                 changeResult);
@@ -44,18 +46,18 @@ public class RemoveAdminCommand extends AdminCommand {
 
     @Override
     public Response execute() {
-        try{
+        try {
             StartedConfigurationChange startedConfigurationChange = logStartAction();
             User user = adminRemover.removeAdmin(this.adminOperation);
             Response response = null;
-            if(user == null){
+            if (user == null) {
                 response = ResponseFactory.error(ADMIN_NOT_REMOVED_MESSAGE);
-            }else{
+            } else {
                 response = ResponseFactory.success(ADMIN_REMOVED_MESSAGE);
             }
-            logFinishAction(startedConfigurationChange,response.isSuccessful());
+            logFinishAction(startedConfigurationChange, response.isSuccessful());
             return response;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseFactory.error(e.getMessage());
         }

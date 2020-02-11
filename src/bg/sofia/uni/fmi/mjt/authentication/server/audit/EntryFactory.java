@@ -6,8 +6,8 @@ import bg.sofia.uni.fmi.mjt.authentication.server.common.ExceptionMessages;
 
 public interface EntryFactory extends ConfigurationChangeFactory {
 
-    static Entry failedLogin(Issuer issuer){
-        if(issuer == null){
+    static Entry failedLogin(Issuer issuer) {
+        if (issuer == null) {
             ;
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }

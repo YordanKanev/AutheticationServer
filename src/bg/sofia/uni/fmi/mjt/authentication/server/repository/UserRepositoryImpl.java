@@ -120,7 +120,7 @@ class UserRepositoryImpl implements UserRepository {
         try (Stream<Path> stream = Files.walk(Paths.get(USER_DIRECTORY))) {
             return stream.filter(file -> !Files.isDirectory(file))
                     .map(path -> {
-                        try (Reader reader = new FileReader(path.toString())){
+                        try (Reader reader = new FileReader(path.toString())) {
                             return reader;
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

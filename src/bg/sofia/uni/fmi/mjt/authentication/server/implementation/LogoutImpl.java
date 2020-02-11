@@ -12,7 +12,7 @@ public class LogoutImpl implements Logout {
     private SessionStore sessionStore;
 
     public LogoutImpl(SessionStore sessionStore) {
-        if(sessionStore == null) {
+        if (sessionStore == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
@@ -21,7 +21,7 @@ public class LogoutImpl implements Logout {
 
     @Override
     public Session logout(UUID sessionId) {
-        if(sessionId == null) {
+        if (sessionId == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }

@@ -24,7 +24,7 @@ class LoginImpl implements Login {
 
     @Override
     public UUID login(UUID sessionId) {
-        if(sessionId == null) {
+        if (sessionId == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return sessionStore.refreshSession(sessionId);
@@ -32,19 +32,19 @@ class LoginImpl implements Login {
 
     @Override
     public UUID login(String username, String password) {
-        if(username == null || password == null) {
+        if (username == null || password == null) {
 
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
 
-        if(userRepository.exists(username)){
+        if (userRepository.exists(username)) {
             User user = userRepository.findOne(username);
-            if(user == null){
-                return  null;
+            if (user == null) {
+                return null;
             }
-            if(user.verifyPassword(password)){
+            if (user.verifyPassword(password)) {
                 UUID sessionId = sessionStore.refreshSession(username);
-                if(sessionId == null){
+                if (sessionId == null) {
                     sessionId = sessionStore.createSession(username);
                 }
                 return sessionId;

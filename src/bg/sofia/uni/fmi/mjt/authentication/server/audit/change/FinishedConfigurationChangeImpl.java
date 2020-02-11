@@ -19,8 +19,8 @@ public class FinishedConfigurationChangeImpl extends ConfigurationChangeImpl imp
         return changeResult;
     }
 
-    private void setChangeResult(ChangeResult changeResult){
-        if(changeResult == null){
+    private void setChangeResult(ChangeResult changeResult) {
+        if (changeResult == null) {
             ;
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }

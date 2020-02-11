@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
 
 public class WebServerImpl implements WebServer {
 
-    public static final String  WEB_SERVER_ALREADY_STARTED_MESSAGE = "WebServer is already started";
+    public static final String WEB_SERVER_ALREADY_STARTED_MESSAGE = "WebServer is already started";
     public static final String WEB_SERVER_NOT_STARTED_MESSAGE = "WebServer is not started.";
 
     private static final int BUFFER_SIZE = 1024;
@@ -69,7 +69,7 @@ public class WebServerImpl implements WebServer {
                             SocketChannel sc = (SocketChannel) key.channel();
 
                             requestByteBuffer.clear();
-                            try{
+                            try {
                                 int r = sc.read(requestByteBuffer);
                                 if (r <= 0) {
                                     sc.close();
@@ -101,7 +101,7 @@ public class WebServerImpl implements WebServer {
                                         }
                                     });
                                 }
-                            }catch (SocketException e){
+                            } catch (SocketException e) {
                                 e.printStackTrace();
                                 keyIterator.remove();
                                 continue;
@@ -116,7 +116,7 @@ public class WebServerImpl implements WebServer {
                         keyIterator.remove();
                     }
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 

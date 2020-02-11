@@ -5,7 +5,7 @@ import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditLog;
 import bg.sofia.uni.fmi.mjt.authentication.server.audit.AuditLogImpl;
 
 public interface AuditLogFactory {
-    static AuditLog getInstance(AuditConfiguration auditConfiguration){
+    static AuditLog getInstance(AuditConfiguration auditConfiguration) {
         return new AuditLogImpl(auditConfiguration);
     }
 }

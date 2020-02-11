@@ -7,7 +7,10 @@ import bg.sofia.uni.fmi.mjt.authentication.server.session.SessionStore;
 
 public interface AuthenticationEngine {
     UserRepository getUserRepository();
+
     AuditLog getAuditLog();
+
     SessionStore getSessionStore();
+
     AuthenticationServerConfiguration getConfiguration();
 }

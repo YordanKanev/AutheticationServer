@@ -60,7 +60,7 @@ public class RegisterCommand extends BasicCommand {
 
     @Override
     public Response execute() {
-        try{
+        try {
             User user = registrator.register(new UserRegistration() {
                 @Override
                 public String getUsername() {
@@ -87,15 +87,15 @@ public class RegisterCommand extends BasicCommand {
                     return email;
                 }
             });
-            if(user == null) {
+            if (user == null) {
                 ResponseFactory.error(NOT_REGISTERED_MESSAGE);
             }
-            UUID sessionId = login.login(username,password);
-            if(sessionId == null){
+            UUID sessionId = login.login(username, password);
+            if (sessionId == null) {
                 return ResponseFactory.error(NOT_LOGGED_IN_MESSAGE);
             }
             return ResponseFactory.success(sessionId.toString());
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseFactory.error(e.getMessage());
         }
 

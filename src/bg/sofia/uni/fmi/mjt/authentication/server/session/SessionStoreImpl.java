@@ -10,7 +10,9 @@ public class SessionStoreImpl implements SessionStore {
 
     private ConcurrentHashMap<String, Session> usernameToSession = new ConcurrentHashMap<>();
     private ConcurrentHashMap<UUID, Session> sessionIdToSession = new ConcurrentHashMap<>();
-    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
+    private ScheduledExecutorService executorService =
+            Executors.newScheduledThreadPool(Runtime.getRuntime()
+                    .availableProcessors());
     private long ttl;
     private Map<UUID, ScheduledFuture> expirations = new ConcurrentHashMap<>();
 
@@ -49,13 +51,14 @@ public class SessionStoreImpl implements SessionStore {
         expirations.put(session.getSessionId(), scheduledFuture);
     }
 
-    private boolean cancelExpiration(Session session){
+    private boolean cancelExpiration(Session session) {
         ScheduledFuture scheduledFuture = expirations.remove(session.getSessionId());
         if (scheduledFuture == null) {
             return false;
         }
         return scheduledFuture.cancel(false);
     }
+
     private UUID refreshSession(Session session) {
         if (session == null) {
             return null;
@@ -114,7 +117,7 @@ public class SessionStoreImpl implements SessionStore {
             return null;
         }
         Session deleted = sessionIdToSession.remove(session.getSessionId());
-        if(deleted == null){
+        if (deleted == null) {
             return null;
         }
         cancelExpiration(session);
@@ -132,8 +135,8 @@ public class SessionStoreImpl implements SessionStore {
             return null;
         }
         Session deleted = usernameToSession.remove(session.getUsername());
-        if(deleted == null){
-            return  null;
+        if (deleted == null) {
+            return null;
         }
         cancelExpiration(session);
         return deleted;
@@ -141,7 +144,7 @@ public class SessionStoreImpl implements SessionStore {
 
     @Override
     public Session getSession(UUID sessionId) {
-        if(sessionId == null){
+        if (sessionId == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         return sessionIdToSession.get(sessionId);

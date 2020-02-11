@@ -38,7 +38,7 @@ public class ResetPasswordCommand extends BasicCommand implements Secured {
 
     public ResetPasswordCommand(Request request, UserRepository userRepository, SessionStore sessionStore) throws ParseException {
         super(request);
-        if(userRepository == null || sessionStore == null) {
+        if (userRepository == null || sessionStore == null) {
             throw new IllegalArgumentException(ExceptionMessages.ARGUMENT_CANNOT_BE_NULL);
         }
         String[] words = request.getRequestBody().split("\\s+");
@@ -55,26 +55,27 @@ public class ResetPasswordCommand extends BasicCommand implements Secured {
         this.sessionStore = sessionStore;
         this.userRepository = userRepository;
     }
+
     @Override
     public Response execute() {
-        try{
-            if(!sessionStore.hasActiveSession(UUID.fromString(sessionId))){
+        try {
+            if (!sessionStore.hasActiveSession(UUID.fromString(sessionId))) {
                 return ResponseFactory.error(Secured.INVALID_SESSION_ID_MESSAGE);
             }
             User user = userRepository.findOne(username);
-            if(user == null){
+            if (user == null) {
                 return ResponseFactory.error(UserRepository.USER_NOT_FOUND_MESSAGE);
             }
-            if(!user.verifyPassword(oldPassword)){
+            if (!user.verifyPassword(oldPassword)) {
                 return ResponseFactory.error(User.PASSWORD_MISMATCH_MESSAGE);
             }
             user.setPassword(newPassword);
             User updated = userRepository.save(user);
-            if(updated == null){
-               return ResponseFactory.error(PASSWORD_NOT_UPDATED_MESSAGE);
+            if (updated == null) {
+                return ResponseFactory.error(PASSWORD_NOT_UPDATED_MESSAGE);
             }
             return ResponseFactory.success(PASWORD_UPDATED_MESSAGE);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseFactory.error(e.getMessage());
         }
